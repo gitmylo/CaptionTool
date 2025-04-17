@@ -17,6 +17,7 @@ public partial class MinMaxSlider : Control
     private (double, double) last = (0, 1);
 
     public event Action<(double, double)> ValueChanged;
+    public event Action<(double, double)> AlwaysTriggerValueChanged;
 
     public override void _Process(double delta)
     {
@@ -26,6 +27,7 @@ public partial class MinMaxSlider : Control
         {
             last = (a, b);
             ValueChanged?.Invoke(last);
+            AlwaysTriggerValueChanged?.Invoke(last);
         }
 
         if (dragState != 0)
@@ -48,6 +50,7 @@ public partial class MinMaxSlider : Control
         last = (a, b);
         this.a = a;
         this.b = b;
+        AlwaysTriggerValueChanged?.Invoke(last);
     }
 
     public ref double min

@@ -40,6 +40,7 @@ public partial class NewUI : Node
     private float activeAspect;
 
     [Export] private ColorIndicator indicator;
+    [Export] private Label rangeIndicatorText;
     
     private Config config;
     private string selectedWorkspace;
@@ -137,6 +138,7 @@ public partial class NewUI : Node
         // minSlider.ValueChanged += _ => MarkIndicatorChangeAccurate();
         // maxSlider.ValueChanged += _ => MarkIndicatorChangeAccurate();
         rangeSlider.ValueChanged += _ => MarkIndicatorChangeAccurate();
+        rangeSlider.AlwaysTriggerValueChanged += _ => UpdateRangeIndicatorText();
         captionBox.TextChanged += MarkIndicatorChangeAccurate;
 
         EntryList.ItemSelected += index =>
@@ -508,6 +510,17 @@ public partial class NewUI : Node
         {
             EntryList.SetItemText(i, (i + 1).ToString());
         }
+    }
+
+    public void UpdateRangeIndicatorText()
+    {
+        var (start, end, _) = GetRange();
+        rangeIndicatorText.Text = $"[{MakePrintable(start)}s -> {MakePrintable(end)}s] ({MakePrintable(end - start)}s)";
+    }
+
+    public string MakePrintable(double number)
+    {
+        return number.ToString("0.00");
     }
     
     #endregion

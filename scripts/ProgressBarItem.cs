@@ -41,16 +41,13 @@ public partial class ProgressBarItem : Node
         }
 
         progressBar.Value = progress;
-        if (statusWindow.Visible && status.exitCode == -2)
+        if (statusWindow.Visible && status.log != lastLog)
         {
-            if (status.log != lastLog)
-            {
-                var oldScroll = (logText.ScrollVertical, logText.ScrollHorizontal);
-                logText.Text = status.log;
-                (logText.ScrollVertical, logText.ScrollHorizontal) = oldScroll;
-                
-                lastLog = status.log;
-            }
+            var oldScroll = (logText.ScrollVertical, logText.ScrollHorizontal);
+            logText.Text = status.log;
+            (logText.ScrollVertical, logText.ScrollHorizontal) = oldScroll;
+            
+            lastLog = status.log;
         }
     }
 
