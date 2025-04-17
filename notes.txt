@@ -1,0 +1,9 @@
+use OS.execute (or whatever the C# name is) to run ffmpeg
+
+Example command to split a video (cuts from 1 minute to 2 minutes):
+ffmpeg -ss 00:01:00 -to 00:02:00 -i input.mp4 -c copy output.mp4
+
+You might want to create a formatter to support these numbers, also, being able to do it in milliseconds could also be helpful
+This method does not re-encode, making it fast, but slightly inprecise.
+
+According to https://superuser.com/a/377407, time can use format "00:01:23.000" or even "83" for just seconds (assuming decimals work here too)

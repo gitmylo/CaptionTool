@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://btcc0bdg8q3ai"]
+
+[ext_resource type="Script" uid="uid://bw566e0lmilo4" path="res://scripts/ProgressBarItem.cs" id="1_ebtod"]
+
+[node name="ProgressItem" type="HBoxContainer" node_paths=PackedStringArray("textLabel", "progressBar", "deleteButton", "statusWindow", "logText")]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 27.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+script = ExtResource("1_ebtod")
+textLabel = NodePath("Label")
+progressBar = NodePath("ProgressBar")
+deleteButton = NodePath("Button")
+statusWindow = NodePath("Window")
+logText = NodePath("Window/TextEdit")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "a/long/example/file/path"
+horizontal_alignment = 2
+
+[node name="ShowLogButton" type="Button" parent="."]
+layout_mode = 2
+text = "Show log"
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+
+[node name="Button" type="Button" parent="."]
+visible = false
+layout_mode = 2
+text = "Remove"
+
+[node name="Window" type="Window" parent="."]
+title = "Log"
+initial_position = 2
+size = Vector2i(500, 400)
+visible = false
+wrap_controls = true
+
+[node name="TextEdit" type="TextEdit" parent="Window"]
+custom_minimum_size = Vector2(500, 400)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Log goes here..."
+editable = false
+
+[connection signal="pressed" from="ShowLogButton" to="Window" method="show"]

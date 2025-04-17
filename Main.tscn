@@ -1,0 +1,111 @@
+[gd_scene load_steps=3 format=3 uid="uid://dx16ssixbfwce"]
+
+[ext_resource type="Script" uid="uid://ddxlj44w37jnq" path="res://scripts/Main.cs" id="1_glv2v"]
+
+[sub_resource type="VideoStreamFFmpeg" id="VideoStreamFFmpeg_glv2v"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("inFiles", "outFiles", "player", "playPause", "saveButton", "progressBar", "minSlider", "maxSlider", "captionBox", "aspectBox")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_glv2v")
+inFiles = NodePath("HSplitContainer/VSplitContainer/InFileList")
+outFiles = NodePath("HSplitContainer/VSplitContainer/OutFileList")
+player = NodePath("HSplitContainer/VBoxContainer/AspectRatioContainer/VideoStreamPlayer")
+playPause = NodePath("HSplitContainer/VBoxContainer/VideoControls/Controls/PlayPause")
+saveButton = NodePath("HSplitContainer/VBoxContainer/VideoControls/Controls/Save")
+progressBar = NodePath("HSplitContainer/VBoxContainer/VideoControls/Sliders/Progress")
+minSlider = NodePath("HSplitContainer/VBoxContainer/VideoControls/Sliders/Range/RangeStart")
+maxSlider = NodePath("HSplitContainer/VBoxContainer/VideoControls/Sliders/Range/RangeEnd")
+captionBox = NodePath("HSplitContainer/VBoxContainer/CaptionBox")
+aspectBox = NodePath("HSplitContainer/VBoxContainer/AspectRatioContainer")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 500
+
+[node name="VSplitContainer" type="VSplitContainer" parent="HSplitContainer"]
+layout_mode = 2
+split_offset = 400
+
+[node name="InFileList" type="Tree" parent="HSplitContainer/VSplitContainer"]
+layout_mode = 2
+hide_root = true
+
+[node name="OutFileList" type="Tree" parent="HSplitContainer/VSplitContainer"]
+layout_mode = 2
+hide_root = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="HSplitContainer/VBoxContainer/AspectRatioContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stream = SubResource("VideoStreamFFmpeg_glv2v")
+expand = true
+loop = true
+
+[node name="VideoControls" type="HBoxContainer" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Controls" type="VBoxContainer" parent="HSplitContainer/VBoxContainer/VideoControls"]
+layout_mode = 2
+
+[node name="PlayPause" type="Button" parent="HSplitContainer/VBoxContainer/VideoControls/Controls"]
+layout_mode = 2
+text = "Play/Pause"
+
+[node name="Save" type="Button" parent="HSplitContainer/VBoxContainer/VideoControls/Controls"]
+layout_mode = 2
+text = "Save caption"
+
+[node name="Refresh" type="Button" parent="HSplitContainer/VBoxContainer/VideoControls/Controls"]
+layout_mode = 2
+text = "Refresh file lists"
+
+[node name="Sliders" type="VBoxContainer" parent="HSplitContainer/VBoxContainer/VideoControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Progress" type="HSlider" parent="HSplitContainer/VBoxContainer/VideoControls/Sliders"]
+layout_mode = 2
+step = 0.0
+
+[node name="Range" type="VBoxContainer" parent="HSplitContainer/VBoxContainer/VideoControls/Sliders"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/VBoxContainer/VideoControls/Sliders/Range"]
+layout_mode = 2
+text = "Range:"
+
+[node name="RangeStart" type="HSlider" parent="HSplitContainer/VBoxContainer/VideoControls/Sliders/Range"]
+layout_mode = 2
+step = 0.0
+
+[node name="RangeEnd" type="HSlider" parent="HSplitContainer/VBoxContainer/VideoControls/Sliders/Range"]
+layout_mode = 2
+step = 0.0
+value = 100.0
+
+[node name="CaptionBox" type="TextEdit" parent="HSplitContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+placeholder_text = "Caption here"
+
+[connection signal="pressed" from="HSplitContainer/VBoxContainer/VideoControls/Controls/PlayPause" to="." method="TogglePlay"]
+[connection signal="pressed" from="HSplitContainer/VBoxContainer/VideoControls/Controls/Save" to="." method="ApplyCaption"]
+[connection signal="pressed" from="HSplitContainer/VBoxContainer/VideoControls/Controls/Refresh" to="." method="RefreshPaths" binds= [false]]

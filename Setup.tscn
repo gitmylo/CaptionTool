@@ -1,0 +1,123 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckqro2w5og4fu"]
+
+[ext_resource type="Script" uid="uid://dukfid8busb26" path="res://scripts/Setup.cs" id="1_d6p50"]
+[ext_resource type="PackedScene" uid="uid://dx16ssixbfwce" path="res://Main.tscn" id="2_rrakj"]
+
+[node name="Setup" type="Control" node_paths=PackedStringArray("fpsSpinBox", "saveTxt")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d6p50")
+fpsSpinBox = NodePath("CenterContainer/VBoxContainer/HBoxContainer/Fps")
+saveTxt = NodePath("CenterContainer/VBoxContainer/HBoxContainer/Savetxt")
+MainScene = ExtResource("2_rrakj")
+
+[node name="MissingPathDialog" type="AcceptDialog" parent="."]
+title = "Missing paths"
+initial_position = 2
+size = Vector2i(403, 100)
+ok_button_text = "Close"
+dialog_text = "You need to select a source and destination folder"
+
+[node name="SourceDirDialog" type="FileDialog" parent="."]
+title = "Open a Directory"
+initial_position = 2
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+
+[node name="DestDirDialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+title = "Open a Directory"
+initial_position = 2
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="Source" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Source" type="HBoxContainer" parent="CenterContainer/VBoxContainer/Source"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/Source/Source"]
+layout_mode = 2
+text = "Select"
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Source/Source"]
+layout_mode = 2
+text = "Choose a source folder"
+
+[node name="SourceLabel" type="Label" parent="CenterContainer/VBoxContainer/Source"]
+layout_mode = 2
+text = "Waiting for selection"
+
+[node name="Dest" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Dest" type="HBoxContainer" parent="CenterContainer/VBoxContainer/Dest"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/Dest/Dest"]
+layout_mode = 2
+text = "Select"
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Dest/Dest"]
+layout_mode = 2
+text = "Choose a destination folder"
+
+[node name="DestLabel" type="Label" parent="CenterContainer/VBoxContainer/Dest"]
+layout_mode = 2
+text = "Waiting for selection"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Fps" type="SpinBox" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "The framerate to convert the captioned videos to."
+min_value = 1.0
+max_value = 99999.0
+value = 16.0
+alignment = 1
+suffix = "fps"
+
+[node name="Savetxt" type="CheckBox" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Create a .txt file, even if no caption is written"
+button_pressed = true
+text = "Always make .txt"
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StartButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start captioning"
+
+[connection signal="MissingPath" from="." to="MissingPathDialog" method="show"]
+[connection signal="dir_selected" from="SourceDirDialog" to="." method="SetSource"]
+[connection signal="dir_selected" from="SourceDirDialog" to="CenterContainer/VBoxContainer/Source/SourceLabel" method="set_text"]
+[connection signal="dir_selected" from="DestDirDialog" to="." method="SetDest"]
+[connection signal="dir_selected" from="DestDirDialog" to="CenterContainer/VBoxContainer/Dest/DestLabel" method="set_text"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Source/Source/Button" to="SourceDirDialog" method="show"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Dest/Dest/Button" to="DestDirDialog" method="show"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/StartButton" to="." method="Start"]
