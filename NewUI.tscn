@@ -1,10 +1,12 @@
-[gd_scene load_steps=18 format=3 uid="uid://cot6blxye5n0r"]
+[gd_scene load_steps=21 format=3 uid="uid://cot6blxye5n0r"]
 
 [ext_resource type="Script" uid="uid://ktq1ukfbueuc" path="res://scripts/NewUI.cs" id="1_wmd31"]
 [ext_resource type="Script" uid="uid://bfs3hnhkf54ey" path="res://scripts/util/SettingsUI.cs" id="2_d134i"]
 [ext_resource type="Script" uid="uid://doxv0emgjy6ba" path="res://scripts/ColorIndicator.cs" id="2_n2i5l"]
 [ext_resource type="Script" uid="uid://oi0je2ifv8t0" path="res://scripts/ui/MinMaxSlider.cs" id="3_xq6f8"]
 [ext_resource type="PackedScene" uid="uid://btcc0bdg8q3ai" path="res://prefabs/progress_item.tscn" id="4_d3anu"]
+[ext_resource type="Script" uid="uid://dw4ai3d4hdkbf" path="res://scripts/util/LLMCaptionButton.cs" id="4_x3v8y"]
+[ext_resource type="Script" uid="uid://ca5ecxc62xgpl" path="res://scripts/globalsettingclasses/GlobalSetting.cs" id="6_4mqxk"]
 
 [sub_resource type="VideoStreamFFmpeg" id="VideoStreamFFmpeg_d134i"]
 
@@ -49,6 +51,9 @@ content_margin_bottom = 20.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_wmd31"]
 font_size = 25
+
+[sub_resource type="LabelSettings" id="LabelSettings_xq6f8"]
+font_size = 21
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2i5l"]
 content_margin_left = 20.0
@@ -112,9 +117,10 @@ item_2/id = 2
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 1
 
 [node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 400
@@ -159,6 +165,7 @@ layout_mode = 2
 
 [node name="Controls" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls"]
 layout_mode = 2
+size_flags_vertical = 8
 
 [node name="PlayPause" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls"]
 layout_mode = 2
@@ -220,6 +227,17 @@ notches = Color(0.866667, 0.866667, 0.866667, 1)
 inset = 5.0
 metadata/_custom_type_script = "uid://oi0je2ifv8t0"
 
+[node name="Extras" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Extras" node_paths=PackedStringArray("Player", "CaptionBox", "Indicator")]
+layout_mode = 2
+text = "LLM caption"
+script = ExtResource("4_x3v8y")
+Player = NodePath("../../../../AspectRatioContainer/VideoStreamPlayer")
+CaptionBox = NodePath("../../../../CaptionBox")
+Indicator = NodePath("../../../../../VBoxContainer/ColorIndicator")
+
 [node name="CaptionBox" type="TextEdit" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption"]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
@@ -249,41 +267,48 @@ color = Color(1, 0, 0, 1)
 script = ExtResource("2_n2i5l")
 
 [node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "inPath", "procPath", "outPath")]
-visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wmd31")
 script = ExtResource("2_d134i")
-fpsBox = NodePath("VBoxContainer/GridContainer/Fps")
-saveTxtBox = NodePath("VBoxContainer/GridContainer/Savetxt")
-inPath = NodePath("VBoxContainer/GridContainer/HBoxContainer/Input/Input")
-procPath = NodePath("VBoxContainer/GridContainer/HBoxContainer/Processing/Processing")
-outPath = NodePath("VBoxContainer/GridContainer/HBoxContainer/Output/Output")
+fpsBox = NodePath("Holder/Workspace/GridContainer/Fps")
+saveTxtBox = NodePath("Holder/Workspace/GridContainer/Savetxt")
+inPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Input/Input")
+procPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Processing/Processing")
+outPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Output/Output")
 metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings"]
+[node name="Holder" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings"]
 layout_mode = 2
 
-[node name="SettingsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/VBoxContainer"]
+[node name="SettingsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder"]
 layout_mode = 2
 text = "Settings"
 label_settings = SubResource("LabelSettings_wmd31")
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/Holder"]
 layout_mode = 2
 theme_override_constants/separation = 9
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Settings/VBoxContainer"]
+[node name="Workspace" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace"]
+layout_mode = 2
+text = "Workspace settings"
+label_settings = SubResource("LabelSettings_xq6f8")
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace"]
 layout_mode = 2
 size_flags_vertical = 3
 columns = 2
 
-[node name="FpsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer"]
+[node name="FpsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
 text = "Fps: "
 horizontal_alignment = 2
 
-[node name="Fps" type="SpinBox" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer"]
+[node name="Fps" type="SpinBox" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 tooltip_text = "The framerate to convert the captioned videos to."
@@ -293,68 +318,159 @@ value = 16.0
 alignment = 1
 suffix = "fps"
 
-[node name="SaveTxtLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer"]
+[node name="SaveTxtLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
 text = "Save txt file without caption:"
 horizontal_alignment = 2
 
-[node name="Savetxt" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer"]
+[node name="Savetxt" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 tooltip_text = "Create a .txt file, even if no caption is written"
 button_pressed = true
 text = "Save"
 
-[node name="FilePathsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer"]
+[node name="FilePathsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
 text = "File paths:"
 horizontal_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Input" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer"]
+[node name="Input" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer/Input"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Input"]
 layout_mode = 2
 text = "  Input:"
 
-[node name="Input" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer/Input"]
+[node name="Input" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Input"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "raw"
 placeholder_text = "raw"
 
-[node name="Processing" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer"]
+[node name="Processing" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer/Processing"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Processing"]
 layout_mode = 2
 text = "  Processing:"
 
-[node name="Processing" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer/Processing"]
+[node name="Processing" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Processing"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "processing"
 placeholder_text = "processing"
 
-[node name="Output" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer"]
+[node name="Output" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer/Output"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Output"]
 layout_mode = 2
 text = "  Output:"
 
-[node name="Output" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/VBoxContainer/GridContainer/HBoxContainer/Output"]
+[node name="Output" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Output"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "captioned"
 placeholder_text = "captioned"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/Holder"]
+custom_minimum_size = Vector2(0, 13)
+layout_mode = 2
+
+[node name="Global" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global"]
+layout_mode = 2
+text = "Global settings"
+label_settings = SubResource("LabelSettings_xq6f8")
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Global"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+layout_mode = 2
+text = "Api endpoint"
+horizontal_alignment = 2
+
+[node name="Endpoint" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "https://api.openai.com/v1/"
+placeholder_text = "https://api.openai.com/v1/"
+
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Endpoint" node_paths=PackedStringArray("valueSource")]
+script = ExtResource("6_4mqxk")
+Name = "api_endpoint"
+valueSource = NodePath("..")
+
+[node name="Label2" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+layout_mode = 2
+text = "Api key"
+horizontal_alignment = 2
+
+[node name="Key" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+secret = true
+
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Key" node_paths=PackedStringArray("valueSource")]
+script = ExtResource("6_4mqxk")
+Name = "api_key"
+valueSource = NodePath("..")
+
+[node name="Label4" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+layout_mode = 2
+text = "Api model"
+horizontal_alignment = 2
+
+[node name="Model" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "model"
+
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Model" node_paths=PackedStringArray("valueSource")]
+script = ExtResource("6_4mqxk")
+Name = "api_model"
+valueSource = NodePath("..")
+
+[node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+layout_mode = 2
+text = "System prompt"
+
+[node name="SystemPrompt" type="TextEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+text = "You are a helpful captioning assistant, you are provided with a frame from a video, and you should tag everything you see, the characters, the actions, other objects in the scene, perspectives, etc. The more the better.
+
+[Captioning style]
+Captions are written as concepts and short phrases, with commas separating them. Some example tags are \"male, female, red hoodie\", write as many tags as required to describe the whole scene. You are permitted to make assumptions about movements, as you are provided a still frame.
+
+[Response format]
+When responding to the user message, only respond with the tags, with no prefixes or suffixes. Just the tags and nothing more."
+placeholder_text = "You are a helpful captioning assistant, you are provided with a frame from a video, and you should tag everything you see, the characters, the actions, other objects in the scene, perspectives, etc. The more the better.
+
+[Captioning style]
+Captions are written as concepts and short phrases, with commas separating them. Some example tags are \"male, female, red hoodie\", write as many tags as required to describe the whole scene. You are permitted to make assumptions about movements, as you are provided a still frame.
+
+[Response format]
+When responding to the user message, only respond with the tags, with no prefixes or suffixes. Just the tags and nothing more."
+wrap_mode = 1
+
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/SystemPrompt" node_paths=PackedStringArray("valueSource")]
+script = ExtResource("6_4mqxk")
+Name = "system_prompt"
+valueSource = NodePath("..")
 
 [node name="Export" type="PanelContainer" parent="VBoxContainer/TabContainer"]
 visible = false

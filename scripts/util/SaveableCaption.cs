@@ -67,7 +67,6 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
     public double ParseFfmpegTimeToSeconds(string h, string m, string s)
     {
         var culture = CultureInfo.InvariantCulture;
-        var time = 0;
         if (int.TryParse(h, culture, out var hours))
         {
             if (int.TryParse(m, culture, out var minutes))

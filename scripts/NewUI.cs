@@ -72,6 +72,8 @@ public partial class NewUI : Node
     
     public override void _Ready()
     {
+        Engine.MaxFps = 60;
+        
         InitNew();
         SettingsTab.SettingChanged += () =>
         {
