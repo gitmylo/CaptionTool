@@ -9,6 +9,7 @@ using Array = Godot.Collections.Array;
 public partial class LLMCaptionButton : Button
 {
     [Export] private VideoStreamPlayer Player;
+    [Export] private TextureRect ImageViewer;
     [Export] private TextEdit CaptionBox;
     [Export] private ColorIndicator Indicator;
 
@@ -170,7 +171,8 @@ public partial class LLMCaptionButton : Button
     public string CaptureVideoFrame()
     {
         // Capture a frame from the video
-        var bytes = Player.GetViewport().GetTexture().GetImage().GetRegion((Rect2I)Player.GetGlobalRect()).SaveJpgToBuffer();
+        Control component = Player.IsVisible() ? Player : ImageViewer;
+        var bytes = component.GetViewport().GetTexture().GetImage().GetRegion((Rect2I)component.GetGlobalRect()).SaveJpgToBuffer();
         var encoded = new byte[Base64.GetMaxEncodedToUtf8Length(bytes.Length)];
         Base64.EncodeToUtf8(bytes, encoded, out int consumed, out int bytesWritten);
         return Encoding.UTF8.GetString(encoded[..bytesWritten]);

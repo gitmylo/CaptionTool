@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 
 public partial class NewUI : Node
 {
+    public static readonly string[] ImageExtensions = ["png", "jpg", "jpeg", "bmp", "webp"];
+    
     #region EXPORTS_AND_PROPERTIES
     
     [Export] private TabContainer MainTabs;
@@ -30,6 +32,7 @@ public partial class NewUI : Node
 
     [Export] private TextEdit captionBox;
     [Export] private AspectRatioContainer aspectBox;
+    [Export] private TextureRect imageBox;
     [Export] private ItemList EntryList;
 
     [Export] private Label activeVidLabel;
@@ -88,7 +91,8 @@ public partial class NewUI : Node
             var item = inFiles.GetSelected();
             var path = item.GetTooltipText(0); // Contains the full path
             GD.Print($"Selected file {path}.");
-            SelectVideo(path);
+            // SelectVideo(path);
+            SelectMedia(path);
         };
         
         bool? wasPaused = null;
@@ -278,21 +282,43 @@ public partial class NewUI : Node
 
     #region CAPTIONING
 
-    void SelectVideo(string file)
+    void SelectMedia(string file)
     {
         activeVid = file;
         activeVidLabel.Text = file;
 
+        captions = CaptionsForVideo(); // Try to get the already written captions.
+        InitCaptionsList(captions.Length);
+        SelectCaption(0); // Try to select the first caption
+        
+        if (ImageExtensions.Contains(file.GetExtension().ToLower()))
+        {
+            aspectBox.Visible = false;
+            imageBox.Visible = true;
+            playPause.Disabled = true;
+            SelectImage(file);
+        }
+        else
+        {
+            aspectBox.Visible = true;
+            imageBox.Visible = false;
+            playPause.Disabled = false;
+            SelectVideo(file);
+        }
+    }
 
+    void SelectImage(string file)
+    {
+        imageBox.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile(file));
+    }
+    
+    void SelectVideo(string file)
+    {
         player.GetStream().SetFile(file);
         activeDuration = FfmpegUtil.GetDuration(file);
         activeAspect = FfmpegUtil.GetAspectRatio(file);
         aspectBox.Ratio = Mathf.Abs(activeAspect);
         GD.Print($"Active duration: {activeDuration}, aspect ratio: {activeAspect}");
-
-        captions = CaptionsForVideo(); // Try to get the already written captions.
-        InitCaptionsList(captions.Length);
-        SelectCaption(0); // Try to select the first caption
         
         if (player.IsPlaying())
         {
@@ -542,7 +568,11 @@ public partial class NewUI : Node
         {
             string path = currentPath.PathJoin(file);
             var captions = CaptionsForVideo(path);
-            for (int i = 0; i < captions.Length; i++)
+            if (captions.Length == 0)
+            {
+                current.Add(new ExportableEntry(path, 0, config, new SaveableCaption() {bypassduration = true}));
+            }
+            else for (int i = 0; i < captions.Length; i++)
             {
                 var caption = captions[i];
                 current.Add(new ExportableEntry(path, i, config, caption));

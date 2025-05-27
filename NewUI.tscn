@@ -61,7 +61,7 @@ content_margin_top = 20.0
 content_margin_right = 20.0
 content_margin_bottom = 20.0
 
-[node name="NewUi" type="Control" node_paths=PackedStringArray("MainTabs", "SettingsTab", "WorkspaceDialog", "inFiles", "player", "playPause", "saveButton", "newButton", "deleteButton", "progressBar", "rangeSlider", "captionBox", "aspectBox", "EntryList", "activeVidLabel", "indicator", "rangeIndicatorText", "threadCount", "exportButton", "mainProgressBar", "progressBarParent", "exportFlags")]
+[node name="NewUi" type="Control" node_paths=PackedStringArray("MainTabs", "SettingsTab", "WorkspaceDialog", "inFiles", "player", "playPause", "saveButton", "newButton", "deleteButton", "progressBar", "rangeSlider", "captionBox", "aspectBox", "imageBox", "EntryList", "activeVidLabel", "indicator", "rangeIndicatorText", "threadCount", "exportButton", "mainProgressBar", "progressBarParent", "exportFlags")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -82,6 +82,7 @@ progressBar = NodePath("VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndC
 rangeSlider = NodePath("VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range/MinMaxSlider")
 captionBox = NodePath("VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/CaptionBox")
 aspectBox = NodePath("VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/AspectRatioContainer")
+imageBox = NodePath("VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/ImageBox")
 EntryList = NodePath("VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer/CaptionList/EntryList")
 activeVidLabel = NodePath("VBoxContainer/TabContainer/Files/VBoxContainer/ActiveVid")
 indicator = NodePath("VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer/ColorIndicator")
@@ -117,10 +118,9 @@ item_2/id = 2
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 1
+current_tab = 0
 
 [node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 400
@@ -147,6 +147,12 @@ layout_mode = 2
 [node name="VideoAndCaption" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="ImageBox" type="TextureRect" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption"]
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption"]
 layout_mode = 2
@@ -267,6 +273,7 @@ color = Color(1, 0, 0, 1)
 script = ExtResource("2_n2i5l")
 
 [node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "inPath", "procPath", "outPath")]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wmd31")
 script = ExtResource("2_d134i")

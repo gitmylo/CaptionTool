@@ -15,6 +15,7 @@ public class SaveableCaption
     [JsonProperty] public string caption;
     [JsonProperty] public double start;
     [JsonProperty] public double end;
+    public bool bypassduration = false;
 }
 
 public class StatusContainer // Status container with progress. For editing from other thread.
@@ -48,6 +49,13 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
         DirAccess.MakeDirRecursiveAbsolute(destDir);
         
         WriteCaption(outCaptionPath);
+        if (NewUI.ImageExtensions.Contains(mediaExt.ToLower()))
+        {
+            DirAccess.CopyAbsolute(sourceFile, outVideoPath);
+            status.log += "Copied file (Success).\n";
+            status.progress = 1;
+            return Task.FromResult(1);
+        }
         return RunFfmpegCommandNonBlocking(outVideoPath, exportFlags, status);
     }
 
@@ -110,8 +118,13 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
         // ffmpeg -ss 60.0 -to 120.0 -i input.mp4 -c copy output.mp4
         string command = "ffmpeg";
         string[] exportFlagsSplit = exportFlags == "" ? [] : exportFlags.Split(" "); // Empty list instead of list with 1 empty string.
-        string[] parameters = [..exportFlagsSplit, "-ss", caption.start.ToString(culture), "-to", caption.end.ToString(culture), "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];
         
+        string[] parameters = [..exportFlagsSplit, "-ss", caption.start.ToString(culture), "-to", caption.end.ToString(culture), "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];
+        if (caption.bypassduration)
+        {
+            parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];
+        }
+
         // Array output = new Array();
 
         Dictionary info = OS.ExecuteWithPipe("ffmpeg", parameters, false); // Not blocking
