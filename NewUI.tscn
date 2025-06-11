@@ -1,12 +1,20 @@
-[gd_scene load_steps=21 format=3 uid="uid://cot6blxye5n0r"]
+[gd_scene load_steps=34 format=3 uid="uid://cot6blxye5n0r"]
 
 [ext_resource type="Script" uid="uid://ktq1ukfbueuc" path="res://scripts/NewUI.cs" id="1_wmd31"]
 [ext_resource type="Script" uid="uid://bfs3hnhkf54ey" path="res://scripts/util/SettingsUI.cs" id="2_d134i"]
 [ext_resource type="Script" uid="uid://doxv0emgjy6ba" path="res://scripts/ColorIndicator.cs" id="2_n2i5l"]
+[ext_resource type="Script" uid="uid://cujdqwqj4pyhu" path="res://scripts/ui/RelatedPopup.cs" id="3_56ssd"]
 [ext_resource type="Script" uid="uid://oi0je2ifv8t0" path="res://scripts/ui/MinMaxSlider.cs" id="3_xq6f8"]
 [ext_resource type="PackedScene" uid="uid://btcc0bdg8q3ai" path="res://prefabs/progress_item.tscn" id="4_d3anu"]
 [ext_resource type="Script" uid="uid://dw4ai3d4hdkbf" path="res://scripts/util/LLMCaptionButton.cs" id="4_x3v8y"]
 [ext_resource type="Script" uid="uid://ca5ecxc62xgpl" path="res://scripts/globalsettingclasses/GlobalSetting.cs" id="6_4mqxk"]
+[ext_resource type="Script" uid="uid://bua837x6fq2df" path="res://scripts/graph/GraphManager.cs" id="7_4htuh"]
+[ext_resource type="Script" uid="uid://3j80742j1rdq" path="res://scripts/graph/Nodes/NodeConsts.cs" id="8_m4mrw"]
+[ext_resource type="Script" uid="uid://defbj104bmdy5" path="res://scripts/graph/Nodes/NodeDef.cs" id="8_oq113"]
+[ext_resource type="PackedScene" uid="uid://3j7jmlmf2bex" path="res://scripts/graph/Nodes/impl/input_node.tscn" id="8_wesyw"]
+[ext_resource type="PackedScene" uid="uid://clf3xtt3fm7m0" path="res://scripts/graph/Nodes/impl/output_node.tscn" id="9_6xpl8"]
+[ext_resource type="Script" uid="uid://577oe5hg6jsn" path="res://scripts/graph/Nodes/NodeType.cs" id="9_ch024"]
+[ext_resource type="PackedScene" uid="uid://b4x2y58omdshf" path="res://scripts/graph/Nodes/NodeButton.tscn" id="10_oq113"]
 
 [sub_resource type="VideoStreamFFmpeg" id="VideoStreamFFmpeg_d134i"]
 
@@ -42,6 +50,36 @@ keycode = 87
 
 [sub_resource type="Shortcut" id="Shortcut_56ssd"]
 events = [SubResource("InputEventKey_x3v8y")]
+
+[sub_resource type="Resource" id="Resource_m4mrw"]
+script = ExtResource("9_ch024")
+id = 0
+name = "File path"
+color = Color(1, 0, 0, 1)
+metadata/_custom_type_script = "uid://577oe5hg6jsn"
+
+[sub_resource type="Resource" id="Resource_kqcfq"]
+script = ExtResource("9_ch024")
+id = 1
+name = "Caption"
+color = Color(0.968627, 1, 0, 1)
+metadata/_custom_type_script = "uid://577oe5hg6jsn"
+
+[sub_resource type="Resource" id="Resource_ch024"]
+script = ExtResource("9_ch024")
+id = 2
+name = "Number"
+color = Color(0, 1, 0, 1)
+metadata/_custom_type_script = "uid://577oe5hg6jsn"
+
+[sub_resource type="Resource" id="Resource_oq113"]
+script = ExtResource("8_m4mrw")
+types = [SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024")]
+nodes = Array[ExtResource("8_oq113")]([])
+metadata/_custom_type_script = "uid://3j80742j1rdq"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oq113"]
+bg_color = Color(0.244776, 0.244776, 0.244776, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wmd31"]
 content_margin_left = 20.0
@@ -102,6 +140,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="HidePlace" type="Node" parent="VBoxContainer"]
+
 [node name="MenuBar" type="MenuBar" parent="VBoxContainer"]
 layout_mode = 2
 
@@ -115,12 +155,25 @@ item_1/id = 1
 item_2/text = "Exit"
 item_2/id = 2
 
+[node name="Workflow" type="PopupMenu" parent="VBoxContainer/MenuBar" node_paths=PackedStringArray("showPlace", "hidePlace", "tabs")]
+item_count = 2
+item_0/text = "Save"
+item_0/id = 0
+item_1/text = "Save as"
+item_1/id = 1
+script = ExtResource("3_56ssd")
+showPlace = NodePath("..")
+hidePlace = NodePath("../../HidePlace")
+tabs = NodePath("../../TabContainer")
+validTab = 1
+
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 1
 
 [node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 400
@@ -272,6 +325,105 @@ size_flags_vertical = 8
 color = Color(1, 0, 0, 1)
 script = ExtResource("2_n2i5l")
 
+[node name="Workflow" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+split_offset = 400
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer"]
+layout_mode = 2
+
+[node name="TestButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Test with file"
+
+[node name="ProcessAllButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Process all"
+
+[node name="ProcessDirectoryButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Process directory"
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Saved" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
+layout_mode = 2
+text = "No workflow selected"
+horizontal_alignment = 1
+
+[node name="Workflows" type="Tree" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+hide_root = true
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "popup", "popupSearchBox", "availableNodes")]
+layout_mode = 2
+size_flags_vertical = 3
+right_disconnects = true
+script = ExtResource("7_4htuh")
+consts = SubResource("Resource_oq113")
+InputNode = NodePath("InputNode")
+OutputNode = NodePath("OutputNode")
+popup = NodePath("PopupPanel")
+popupSearchBox = NodePath("PopupPanel/VBoxContainer/SearchBox")
+availableNodes = NodePath("PopupPanel/VBoxContainer/ScrollContainer/ItemsList")
+nodeButtonScene = ExtResource("10_oq113")
+
+[node name="PopupPanel" type="PopupPanel" parent="VBoxContainer/TabContainer/Workflow/GraphEdit"]
+size = Vector2i(303, 300)
+theme_override_styles/panel = SubResource("StyleBoxFlat_oq113")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel"]
+offset_right = 303.0
+offset_bottom = 300.0
+size_flags_horizontal = 3
+
+[node name="SearchBox" type="LineEdit" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Search"
+alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="ItemsList" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" instance=ExtResource("8_wesyw")]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 200.0
+offset_right = 304.0
+offset_bottom = 303.0
+position_offset = Vector2(200, 200)
+
+[node name="OutputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" instance=ExtResource("9_6xpl8")]
+layout_mode = 0
+offset_left = 600.0
+offset_top = 200.0
+offset_right = 704.0
+offset_bottom = 278.0
+position_offset = Vector2(600, 200)
+
 [node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "inPath", "procPath", "outPath")]
 visible = false
 layout_mode = 2
@@ -282,7 +434,7 @@ saveTxtBox = NodePath("Holder/Workspace/GridContainer/Savetxt")
 inPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Input/Input")
 procPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Processing/Processing")
 outPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Output/Output")
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="Holder" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings"]
 layout_mode = 2
@@ -483,7 +635,7 @@ valueSource = NodePath("..")
 visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_n2i5l")
-metadata/_tab_index = 2
+metadata/_tab_index = 3
 
 [node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer/Export"]
 layout_mode = 2

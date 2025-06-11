@@ -296,6 +296,7 @@ public partial class NewUI : Node
             aspectBox.Visible = false;
             imageBox.Visible = true;
             playPause.Disabled = true;
+            player.Paused = true;
             SelectImage(file);
         }
         else

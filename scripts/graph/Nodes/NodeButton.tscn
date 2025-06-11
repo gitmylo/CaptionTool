@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://b4x2y58omdshf"]
+
+[ext_resource type="Script" uid="uid://cmgkqs74t65eq" path="res://scripts/graph/Nodes/NodeButton.cs" id="1_3lh1j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3lh1j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bqn2b"]
+bg_color = Color(0, 0, 0, 0.270588)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 0.270588)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_bqn2b"]
+font_size = 12
+font_color = Color(0.942823, 0.942823, 0.942823, 1)
+
+[node name="PanelContainer" type="PanelContainer" node_paths=PackedStringArray("nameLabel", "descriptionLabel", "selectButton")]
+offset_right = 310.0
+offset_bottom = 94.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_3lh1j")
+script = ExtResource("1_3lh1j")
+name = "Title"
+description = "Description"
+nameLabel = NodePath("PanelContainer/Node/Title")
+descriptionLabel = NodePath("PanelContainer/Node/Description")
+selectButton = NodePath("Button")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bqn2b")
+
+[node name="Node" type="VBoxContainer" parent="PanelContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="PanelContainer/Node"]
+layout_mode = 2
+text = "Title"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="PanelContainer/Node"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Short description, lorem ipsum dolor sit amet, bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+label_settings = SubResource("LabelSettings_bqn2b")
+autowrap_mode = 3
