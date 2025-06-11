@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://3j7jmlmf2bex"]
+
+[ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_cv50t"]
+
+[node name="InputNode" type="GraphNode"]
+mouse_filter = 1
+title = "Input"
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 0, 0, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 1
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = true
+slot/1/right_type = 1
+slot/1/right_color = Color(0.966667, 1, 0, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+script = ExtResource("1_cv50t")
+required = true
+
+[node name="FilePathLabel" type="Label" parent="."]
+layout_mode = 2
+text = "File path"
+horizontal_alignment = 2
+
+[node name="CaptionsLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Captions"
+horizontal_alignment = 2

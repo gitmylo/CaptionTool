@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://clf3xtt3fm7m0"]
+
+[ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_xy1yk"]
+
+[node name="OutputNode" type="GraphNode"]
+mouse_filter = 1
+title = "Output"
+slot/0/left_enabled = true
+slot/0/left_type = 1
+slot/0/left_color = Color(0.968627, 1, 0, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 1
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_xy1yk")
+required = true
+
+[node name="CaptionsLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Captions"
