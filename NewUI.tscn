@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cot6blxye5n0r"]
+[gd_scene load_steps=36 format=3 uid="uid://cot6blxye5n0r"]
 
 [ext_resource type="Script" uid="uid://ktq1ukfbueuc" path="res://scripts/NewUI.cs" id="1_wmd31"]
 [ext_resource type="Script" uid="uid://bfs3hnhkf54ey" path="res://scripts/util/SettingsUI.cs" id="2_d134i"]
@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://clf3xtt3fm7m0" path="res://scripts/graph/Nodes/impl/output_node.tscn" id="9_6xpl8"]
 [ext_resource type="Script" uid="uid://577oe5hg6jsn" path="res://scripts/graph/Nodes/NodeType.cs" id="9_ch024"]
 [ext_resource type="PackedScene" uid="uid://b4x2y58omdshf" path="res://scripts/graph/Nodes/NodeButton.tscn" id="10_oq113"]
+[ext_resource type="Script" uid="uid://de32y8uwvvh65" path="res://scripts/graph/Nodes/impl/scripts/InputNode.cs" id="13_kqcfq"]
+[ext_resource type="Script" uid="uid://c45hg0dn8jj2u" path="res://scripts/graph/Nodes/impl/scripts/OutputNode.cs" id="15_wh2er"]
 
 [sub_resource type="VideoStreamFFmpeg" id="VideoStreamFFmpeg_d134i"]
 
@@ -415,6 +417,7 @@ offset_top = 200.0
 offset_right = 304.0
 offset_bottom = 303.0
 position_offset = Vector2(200, 200)
+script = ExtResource("13_kqcfq")
 
 [node name="OutputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" instance=ExtResource("9_6xpl8")]
 layout_mode = 0
@@ -423,6 +426,7 @@ offset_top = 200.0
 offset_right = 704.0
 offset_bottom = 278.0
 position_offset = Vector2(600, 200)
+script = ExtResource("15_wh2er")
 
 [node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "inPath", "procPath", "outPath")]
 visible = false
