@@ -1,0 +1,78 @@
+[gd_scene load_steps=4 format=3 uid="uid://hfn12fjprau3"]
+
+[ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_gohu7"]
+[ext_resource type="Script" uid="uid://ct6wa3r8qvkyc" path="res://scripts/graph/Nodes/impl/scripts/RegexMatch.cs" id="2_gohu7"]
+
+[sub_resource type="Resource" id="Resource_luw6h"]
+script = ExtResource("2_gohu7")
+metadata/_custom_type_script = "uid://ct6wa3r8qvkyc"
+
+[node name="RegexMatch" type="GraphNode" node_paths=PackedStringArray("controls")]
+custom_minimum_size = Vector2(0, 90)
+offset_right = 222.0
+offset_bottom = 90.0
+mouse_filter = 1
+resizable = true
+title = "Regex match"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = true
+slot/1/right_type = 4
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color(1, 1, 1, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color(1, 1, 1, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+script = ExtResource("1_gohu7")
+core = SubResource("Resource_luw6h")
+controls = [NodePath("CheckBox")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Regex"
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Text matches"
+horizontal_alignment = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Subject"
+
+[node name="Label3" type="Label" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Matches"
+horizontal_alignment = 2
+
+[node name="CheckBox" type="CheckBox" parent="."]
+layout_mode = 2
+text = "Match all"

@@ -25,6 +25,12 @@ public partial class GraphManager: GraphEdit
     {
         InitConnection();
         InitNodeButtons();
+
+        foreach (var type in consts.types)
+        {
+            AddValidConnectionType(type.id, consts.AnyType);
+            AddValidConnectionType(consts.AnyType, type.id);
+        }
         
         ConnectionRequest += LinkConnectionRequest;
         DisconnectionRequest += LinkDisconnectionRequest;
@@ -35,22 +41,28 @@ public partial class GraphManager: GraphEdit
             popup.Popup();
             popup.SetPosition((Vector2I)(GetGlobalMousePosition() + (Vector2.Left * (popup.Size.X/2)) + (Vector2.Up * 15)));
             popupSearchBox.Text = "";
+            UpdateSearch("");
             popupSearchBox.GrabFocus();
         };
-        popupSearchBox.TextChanged += newText =>
+        popupSearchBox.TextChanged += UpdateSearch;
+    }
+
+    private void UpdateSearch(string query)
+    {
+        var allNodes = availableNodes.GetChildren().Select(x => x as NodeButton).OfType<NodeButton>().ToList();
+        foreach (var node in allNodes)
         {
-            var allNodes = availableNodes.GetChildren().Select(x => x as NodeButton).OfType<NodeButton>().ToList();
-            foreach (var node in allNodes)
-            {
-                GD.Print(node.name);
-                node.Visible = node.name.ToLower().Contains(newText.ToLower()) || node.description.ToLower().Contains(newText.ToLower());
-            }
-        };
+            node.Visible = node.name.ToLower().Contains(query.ToLower()) || node.description.ToLower().Contains(query.ToLower());
+        }
     }
 
     // Signal receivers
     private void LinkConnectionRequest(StringName fromNode, long fromPort,  StringName toNode, long toPort)
     {
+        foreach (var connection in Connections.Where(x => x["to_node"].AsStringName() == toNode && x["to_port"].AsInt64() == toPort))
+        {
+            DisconnectNode(connection["from_node"].AsStringName(), connection["from_port"].AsInt32(), connection["to_node"].AsStringName(),  connection["to_port"].AsInt32());
+        }
         ConnectNode(fromNode, (int)fromPort, toNode, (int)toPort);
     }
 
@@ -92,6 +104,7 @@ public partial class GraphManager: GraphEdit
     {
         var nodeInst = node.Instantiate<CustomNode>();
         nodeInst.PositionOffset = lastPopup;
+        nodeInst.graph = this;
         AddChild(nodeInst);
         
         popup.Visible = false;

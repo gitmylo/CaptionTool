@@ -1,0 +1,6 @@
+0: String - red
+1: Caption - yellow
+2: Number - green
+3: Boolean - gray
+4: RegexResult - blue
+5: Any - white

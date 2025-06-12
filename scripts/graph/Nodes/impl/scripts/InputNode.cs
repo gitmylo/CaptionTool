@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Godot;
 using Godot.Collections;
 
 namespace CaptionTool.scripts.graph.Nodes.impl.scripts;
 
-public partial class InputNode : CustomNode
+[GlobalClass]
+public partial class InputNode : ExecutionCore
 {
-    public async override Task<Array<Array>> Execute(Array<Array> inputs, NodeExecutionContext context)
+    public async override Task<Array<Array>> Execute(Array<Array> inputs, NodeExecutionContext context, Array values)
     {
-        return new List<Array>{new List<string>{context.fileName}.ToUGdArray(), context.captionsIn.ToUGdArray()}.ToGdArray();
+        return Results(Inner(context.fileName), context.captionsIn.ToUGdArray());
     }
 }

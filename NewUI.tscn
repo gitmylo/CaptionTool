@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cot6blxye5n0r"]
+[gd_scene load_steps=48 format=3 uid="uid://cot6blxye5n0r"]
 
 [ext_resource type="Script" uid="uid://ktq1ukfbueuc" path="res://scripts/NewUI.cs" id="1_wmd31"]
 [ext_resource type="Script" uid="uid://bfs3hnhkf54ey" path="res://scripts/util/SettingsUI.cs" id="2_d134i"]
@@ -14,7 +14,11 @@
 [ext_resource type="PackedScene" uid="uid://3j7jmlmf2bex" path="res://scripts/graph/Nodes/impl/input_node.tscn" id="8_wesyw"]
 [ext_resource type="PackedScene" uid="uid://clf3xtt3fm7m0" path="res://scripts/graph/Nodes/impl/output_node.tscn" id="9_6xpl8"]
 [ext_resource type="Script" uid="uid://577oe5hg6jsn" path="res://scripts/graph/Nodes/NodeType.cs" id="9_ch024"]
+[ext_resource type="PackedScene" uid="uid://c1f8kuc5o30d4" path="res://scripts/graph/Nodes/impl/string_literal.tscn" id="9_wdqke"]
+[ext_resource type="PackedScene" uid="uid://dhyn2gijn4asl" path="res://scripts/graph/Nodes/impl/number_literal.tscn" id="10_g3gri"]
 [ext_resource type="PackedScene" uid="uid://b4x2y58omdshf" path="res://scripts/graph/Nodes/NodeButton.tscn" id="10_oq113"]
+[ext_resource type="PackedScene" uid="uid://hfn12fjprau3" path="res://scripts/graph/Nodes/impl/regex_match.tscn" id="11_ehtkw"]
+[ext_resource type="PackedScene" uid="uid://b71janwa24h80" path="res://scripts/graph/Nodes/impl/flow_bottleneck.tscn" id="12_aof5c"]
 [ext_resource type="Script" uid="uid://de32y8uwvvh65" path="res://scripts/graph/Nodes/impl/scripts/InputNode.cs" id="13_kqcfq"]
 [ext_resource type="Script" uid="uid://c45hg0dn8jj2u" path="res://scripts/graph/Nodes/impl/scripts/OutputNode.cs" id="15_wh2er"]
 
@@ -53,10 +57,38 @@ keycode = 87
 [sub_resource type="Shortcut" id="Shortcut_56ssd"]
 events = [SubResource("InputEventKey_x3v8y")]
 
+[sub_resource type="Resource" id="Resource_g3gri"]
+script = ExtResource("8_oq113")
+name = "String literal"
+description = "A literal string value"
+node = ExtResource("9_wdqke")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_ehtkw"]
+script = ExtResource("8_oq113")
+name = "Number literal"
+description = "A literal number val"
+node = ExtResource("10_g3gri")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_6qlte"]
+script = ExtResource("8_oq113")
+name = "Regex match"
+description = "Match a regex and get fulltext and regex object results"
+node = ExtResource("11_ehtkw")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_r56ay"]
+script = ExtResource("8_oq113")
+name = "Bottleneck flow"
+description = "Ensure the number of items in the list is 1. Take the first item if the input has items. Else use the provided default."
+node = ExtResource("12_aof5c")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
 [sub_resource type="Resource" id="Resource_m4mrw"]
 script = ExtResource("9_ch024")
 id = 0
-name = "File path"
+name = "String"
 color = Color(1, 0, 0, 1)
 metadata/_custom_type_script = "uid://577oe5hg6jsn"
 
@@ -74,14 +106,37 @@ name = "Number"
 color = Color(0, 1, 0, 1)
 metadata/_custom_type_script = "uid://577oe5hg6jsn"
 
+[sub_resource type="Resource" id="Resource_aof5c"]
+script = ExtResource("9_ch024")
+id = 3
+name = "Boolean"
+color = Color(0.666569, 0.666569, 0.666569, 1)
+metadata/_custom_type_script = "uid://577oe5hg6jsn"
+
+[sub_resource type="Resource" id="Resource_l2whv"]
+script = ExtResource("9_ch024")
+id = 4
+name = "RegexResult"
+color = Color(0, 0.483333, 1, 1)
+metadata/_custom_type_script = "uid://577oe5hg6jsn"
+
 [sub_resource type="Resource" id="Resource_oq113"]
 script = ExtResource("8_m4mrw")
-types = [SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024")]
-nodes = Array[ExtResource("8_oq113")]([])
+types = Array[ExtResource("9_ch024")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv")])
+nodes = Array[ExtResource("8_oq113")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_6qlte"), SubResource("Resource_r56ay")])
+AnyType = 5
 metadata/_custom_type_script = "uid://3j80742j1rdq"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oq113"]
 bg_color = Color(0.244776, 0.244776, 0.244776, 1)
+
+[sub_resource type="Resource" id="Resource_wh2er"]
+script = ExtResource("13_kqcfq")
+metadata/_custom_type_script = "uid://de32y8uwvvh65"
+
+[sub_resource type="Resource" id="Resource_wdqke"]
+script = ExtResource("15_wh2er")
+metadata/_custom_type_script = "uid://c45hg0dn8jj2u"
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wmd31"]
 content_margin_left = 20.0
@@ -341,17 +396,12 @@ layout_mode = 2
 [node name="TestButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Test with file"
+text = "Test with selected file"
 
 [node name="ProcessAllButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Process all"
-
-[node name="ProcessDirectoryButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Process directory"
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer"]
 layout_mode = 2
@@ -410,23 +460,25 @@ vertical_scroll_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="InputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" instance=ExtResource("8_wesyw")]
+[node name="InputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" node_paths=PackedStringArray("graph") instance=ExtResource("8_wesyw")]
 layout_mode = 0
 offset_left = 200.0
 offset_top = 200.0
 offset_right = 304.0
 offset_bottom = 303.0
 position_offset = Vector2(200, 200)
-script = ExtResource("13_kqcfq")
+graph = NodePath("..")
+core = SubResource("Resource_wh2er")
 
-[node name="OutputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" instance=ExtResource("9_6xpl8")]
+[node name="OutputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" node_paths=PackedStringArray("graph") instance=ExtResource("9_6xpl8")]
 layout_mode = 0
 offset_left = 600.0
 offset_top = 200.0
 offset_right = 704.0
 offset_bottom = 278.0
 position_offset = Vector2(600, 200)
-script = ExtResource("15_wh2er")
+graph = NodePath("..")
+core = SubResource("Resource_wdqke")
 
 [node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "inPath", "procPath", "outPath")]
 visible = false

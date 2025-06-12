@@ -163,4 +163,6 @@ public static class FfmpegUtil
         CutVideo(inFile, videoOut, startSeconds, endSeconds, config);
         return videoOut;
     }
+    
+    // TODO: Frame extract, `ffmpeg -i troll.jpg -f image2pipe - > troll.png`
 }

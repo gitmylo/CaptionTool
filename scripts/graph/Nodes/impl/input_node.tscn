@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://3j7jmlmf2bex"]
+[gd_scene load_steps=4 format=3 uid="uid://3j7jmlmf2bex"]
 
 [ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_cv50t"]
+[ext_resource type="Script" uid="uid://de32y8uwvvh65" path="res://scripts/graph/Nodes/impl/scripts/InputNode.cs" id="2_e3mxx"]
+
+[sub_resource type="Resource" id="Resource_s751v"]
+script = ExtResource("2_e3mxx")
+metadata/_custom_type_script = "uid://de32y8uwvvh65"
 
 [node name="InputNode" type="GraphNode"]
 mouse_filter = 1
@@ -25,6 +30,7 @@ slot/1/right_icon = null
 slot/1/draw_stylebox = true
 script = ExtResource("1_cv50t")
 required = true
+core = SubResource("Resource_s751v")
 
 [node name="FilePathLabel" type="Label" parent="."]
 layout_mode = 2
