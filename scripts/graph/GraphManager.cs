@@ -24,6 +24,7 @@ public partial class GraphManager: GraphEdit
 
     [Export] private Button testFileButton;
     [Export] private Button processAllButton;
+    [Export] private ScrollContainer scroll;
 
     private Vector2 lastPopup;
 
@@ -44,6 +45,7 @@ public partial class GraphManager: GraphEdit
         PopupRequest += p =>
         {
             lastPopup = p;
+            scroll.ScrollHorizontal = 0;
             popup.Popup();
             popup.SetPosition((Vector2I)(GetGlobalMousePosition() + (Vector2.Left * (popup.Size.X/2)) + (Vector2.Up * 15)));
             popupSearchBox.Text = "";

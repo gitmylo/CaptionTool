@@ -347,7 +347,7 @@ layout_mode = 2
 size_flags_vertical = 3
 hide_root = true
 
-[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "popup", "popupSearchBox", "availableNodes", "testFileButton", "processAllButton")]
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "popup", "popupSearchBox", "availableNodes", "testFileButton", "processAllButton", "scroll")]
 layout_mode = 2
 size_flags_vertical = 3
 right_disconnects = true
@@ -361,6 +361,7 @@ availableNodes = NodePath("PopupPanel/VBoxContainer/ScrollContainer/ItemsList")
 nodeButtonScene = ExtResource("10_oq113")
 testFileButton = NodePath("../VBoxContainer/HBoxContainer/TestButton")
 processAllButton = NodePath("../VBoxContainer/HBoxContainer/ProcessAllButton")
+scroll = NodePath("PopupPanel/VBoxContainer/ScrollContainer")
 
 [node name="PopupPanel" type="PopupPanel" parent="VBoxContainer/TabContainer/Workflow/GraphEdit"]
 size = Vector2i(303, 300)

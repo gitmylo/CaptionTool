@@ -16,6 +16,11 @@ public partial class SaveableCaption : Resource
     [JsonProperty] public double start;
     [JsonProperty] public double end;
     public bool bypassduration = false;
+
+    public override string ToString()
+    {
+        return $"Caption({caption}, {start}, {end}, {bypassduration})";
+    }
 }
 
 public class StatusContainer // Status container with progress. For editing from other thread.

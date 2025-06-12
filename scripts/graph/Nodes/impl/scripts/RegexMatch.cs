@@ -31,8 +31,12 @@ public partial class RegexMatch : ExecutionCore
                 else
                 {
                     var match = compiled.Search(target.AsString());
-                    results.Add(match);
-                    fullTexts.Add(match.Subject);
+                    if (match != null)
+                    {
+                        results.Add(match);
+                        fullTexts.Add(match.Subject);
+                    }
+                    
                 }
             }
         }

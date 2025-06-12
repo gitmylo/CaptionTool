@@ -39,14 +39,14 @@ public partial class CustomNode : GraphNode
         Array outArray = new Array();
         foreach (var control in controls)
         {
-            outArray.Add(GetValueFromControl(control).Value);
+            outArray.Add(GetValueFromControl(control));
         }
 
         return outArray;
     }
 
     // Used to get the values from the controls for the execution cores to use
-    public Variant? GetValueFromControl(Control control)
+    public Variant GetValueFromControl(Control control)
     {
         switch (control)
         {
@@ -56,13 +56,13 @@ public partial class CustomNode : GraphNode
                 return lineEdit.Text;
             case OptionButton optionButton:
                 return optionButton.GetItemText(optionButton.GetSelectedId());
-            case Button button:
+            case CheckBox button:
                 return button.IsPressed();
             case Slider slider:
                 return slider.Value;
             case SpinBox spinBox:
                 return spinBox.Value;
         }
-        return null;
+        throw new NotImplementedException();
     }
 }

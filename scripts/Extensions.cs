@@ -23,11 +23,11 @@ public static class Extensions
         return array.Select(x => x.As<T>()).ToArray();
     }
 
-    public static List<(T1, T2)> GrowZip<T1, T2>(this List<T1> list1, List<T2> list2)
+    public static (T1, T2)[] GrowZip<T1, T2>(this T1[] list1, T2[] list2)
     {
-        if (list1.Count == list2.Count)
+        if (list1.Length == list2.Length)
         {
-            return list1.Zip(list2).ToList();
+            return list1.Zip(list2).ToArray();
         }
         else
         {
@@ -41,7 +41,7 @@ public static class Extensions
                 }
             }
 
-            return outList;
+            return outList.ToArray();
         }
     }
 }

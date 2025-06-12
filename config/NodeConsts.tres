@@ -1,33 +1,37 @@
-[gd_resource type="Resource" script_class="NodeConsts" load_steps=20 format=3 uid="uid://b16ghggybel45"]
+[gd_resource type="Resource" script_class="NodeConsts" load_steps=28 format=3 uid="uid://b16ghggybel45"]
 
 [ext_resource type="Script" uid="uid://defbj104bmdy5" path="res://scripts/graph/Nodes/NodeDef.cs" id="1_1yax3"]
-[ext_resource type="PackedScene" uid="uid://c1f8kuc5o30d4" path="res://scripts/graph/Nodes/impl/string_literal.tscn" id="2_3wws0"]
-[ext_resource type="PackedScene" uid="uid://dhyn2gijn4asl" path="res://scripts/graph/Nodes/impl/number_literal.tscn" id="3_qrmep"]
-[ext_resource type="PackedScene" uid="uid://fghv6by4bgy6" path="res://scripts/graph/Nodes/impl/bool_literal.tscn" id="4_3wws0"]
+[ext_resource type="PackedScene" uid="uid://c1f8kuc5o30d4" path="res://scripts/graph/Nodes/impl/literal/string_literal.tscn" id="2_kdi3d"]
+[ext_resource type="PackedScene" uid="uid://dhyn2gijn4asl" path="res://scripts/graph/Nodes/impl/literal/number_literal.tscn" id="3_e4mmj"]
 [ext_resource type="PackedScene" uid="uid://hfn12fjprau3" path="res://scripts/graph/Nodes/impl/regex_match.tscn" id="4_4odu3"]
-[ext_resource type="PackedScene" uid="uid://b71janwa24h80" path="res://scripts/graph/Nodes/impl/flow_bottleneck.tscn" id="5_kdi3d"]
+[ext_resource type="PackedScene" uid="uid://fghv6by4bgy6" path="res://scripts/graph/Nodes/impl/literal/bool_literal.tscn" id="4_orlgk"]
+[ext_resource type="PackedScene" uid="uid://b71janwa24h80" path="res://scripts/graph/Nodes/impl/flow/flow_bottleneck.tscn" id="6_5rld5"]
 [ext_resource type="Script" uid="uid://3j80742j1rdq" path="res://scripts/graph/Nodes/NodeConsts.cs" id="6_e4mmj"]
+[ext_resource type="PackedScene" uid="uid://c5a7m4cyqynpb" path="res://scripts/graph/Nodes/impl/captions/split_caption.tscn" id="7_4odu3"]
 [ext_resource type="Script" uid="uid://577oe5hg6jsn" path="res://scripts/graph/Nodes/NodeType.cs" id="7_orlgk"]
+[ext_resource type="PackedScene" uid="uid://etqpp7hcullt" path="res://scripts/graph/Nodes/impl/captions/join_caption.tscn" id="8_kdi3d"]
+[ext_resource type="PackedScene" uid="uid://cipo16h5g4iwj" path="res://scripts/graph/Nodes/impl/logic/math_expression.tscn" id="9_kdi3d"]
+[ext_resource type="PackedScene" uid="uid://bvtvtaqt803y5" path="res://scripts/graph/Nodes/impl/logic/compare.tscn" id="10_e4mmj"]
 
 [sub_resource type="Resource" id="Resource_g3gri"]
 script = ExtResource("1_1yax3")
 name = "String literal"
 description = "A literal string value"
-node = ExtResource("2_3wws0")
+node = ExtResource("2_kdi3d")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
 [sub_resource type="Resource" id="Resource_ehtkw"]
 script = ExtResource("1_1yax3")
 name = "Number literal"
 description = "A literal number val"
-node = ExtResource("3_qrmep")
+node = ExtResource("3_e4mmj")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
 [sub_resource type="Resource" id="Resource_qrmep"]
 script = ExtResource("1_1yax3")
 name = "Boolean literal"
 description = "A literal true/false value"
-node = ExtResource("4_3wws0")
+node = ExtResource("4_orlgk")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
 [sub_resource type="Resource" id="Resource_6qlte"]
@@ -41,7 +45,35 @@ metadata/_custom_type_script = "uid://defbj104bmdy5"
 script = ExtResource("1_1yax3")
 name = "Bottleneck flow"
 description = "Ensure the number of items in the list is 1. Take the first item if the input has items. Else use the provided default."
-node = ExtResource("5_kdi3d")
+node = ExtResource("6_5rld5")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_e4mmj"]
+script = ExtResource("1_1yax3")
+name = "Split caption"
+description = "Splits a caption into it's individual fields for editing."
+node = ExtResource("7_4odu3")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_orlgk"]
+script = ExtResource("1_1yax3")
+name = "Join caption"
+description = "Joins a caption from the individual fields for editing."
+node = ExtResource("8_kdi3d")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_isn6l"]
+script = ExtResource("1_1yax3")
+name = "Math Expression"
+description = "Runs a calculation"
+node = ExtResource("9_kdi3d")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_5rld5"]
+script = ExtResource("1_1yax3")
+name = "Comparison"
+description = "Compares two numbers"
+node = ExtResource("10_e4mmj")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
 [sub_resource type="Resource" id="Resource_m4mrw"]
@@ -89,6 +121,6 @@ metadata/_custom_type_script = "uid://577oe5hg6jsn"
 [resource]
 script = ExtResource("6_e4mmj")
 types = Array[ExtResource("7_orlgk")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv"), SubResource("Resource_vlxtm")])
-nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_r56ay")])
+nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5")])
 AnyType = 5
 metadata/_custom_type_script = "uid://3j80742j1rdq"

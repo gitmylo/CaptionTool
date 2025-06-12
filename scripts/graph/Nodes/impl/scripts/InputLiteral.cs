@@ -10,6 +10,6 @@ public partial class InputLiteral : ExecutionCore
 {
     override public async Task<Array<Array>> Execute(Array<Array> inputs, NodeExecutionContext context, Array array)
     {
-        return Results(Inner(array[0].ToString())).ToGdArray();
+        return Results(Inner(array[0])).ToGdArray();
     }
 }

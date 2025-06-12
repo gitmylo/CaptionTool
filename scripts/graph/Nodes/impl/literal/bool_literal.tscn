@@ -25,7 +25,7 @@ slot/0/right_icon = null
 slot/0/draw_stylebox = true
 script = ExtResource("1_my0yy")
 core = SubResource("Resource_cfnqk")
-controls = [NodePath("")]
+controls = [NodePath("CheckBox")]
 
 [node name="CheckBox" type="CheckBox" parent="."]
 layout_mode = 2
