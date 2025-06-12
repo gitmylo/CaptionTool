@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
+using Array = Godot.Collections.Array;
 
 namespace CaptionTool.scripts.graph.Nodes;
 
@@ -31,6 +32,17 @@ public partial class CustomNode : GraphNode
                 SetSlotColorRight(i, typeDict[GetSlotTypeRight(i)].color);
             }
         }
+    }
+
+    public Array GetControlValues()
+    {
+        Array outArray = new Array();
+        foreach (var control in controls)
+        {
+            outArray.Add(GetValueFromControl(control).Value);
+        }
+
+        return outArray;
     }
 
     // Used to get the values from the controls for the execution cores to use

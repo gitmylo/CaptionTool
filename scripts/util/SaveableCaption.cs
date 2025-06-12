@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace CaptionTool.scripts.util;
 
 [JsonObject]
-public class SaveableCaption
+public partial class SaveableCaption : Resource
 {
     [JsonProperty] public string caption;
     [JsonProperty] public double start;

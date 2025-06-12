@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CaptionTool.scripts.graph.Nodes;
+using CaptionTool.scripts.graph.Nodes.impl.scripts;
+using CaptionTool.scripts.util;
 using Godot;
 using Godot.Collections;
 
@@ -18,6 +21,9 @@ public partial class GraphManager: GraphEdit
     [Export] private LineEdit popupSearchBox;
     [Export] private VBoxContainer availableNodes; // Contains NodeButton entries
     [Export] private PackedScene nodeButtonScene;
+
+    [Export] private Button testFileButton;
+    [Export] private Button processAllButton;
 
     private Vector2 lastPopup;
 
@@ -45,6 +51,13 @@ public partial class GraphManager: GraphEdit
             popupSearchBox.GrabFocus();
         };
         popupSearchBox.TextChanged += UpdateSearch;
+
+        testFileButton.Pressed += () =>
+        {
+            var result = ExecuteGraphForInput();
+            result.Wait();
+            var output = result.Result;
+        };
     }
 
     private void UpdateSearch(string query)
@@ -118,5 +131,59 @@ public partial class GraphManager: GraphEdit
     List<CustomNode> GetNodes()
     {
         return GetChildren().Where(x => x is CustomNode).Cast<CustomNode>().ToList();
+    }
+
+    public async Task<SaveableCaption[]> ExecuteGraphForInput()
+    {
+        var graph = BuildGraph("Example.mp4",
+            new SaveableCaption[] { new SaveableCaption { bypassduration = true, caption = "This is a caption" } });
+        await graph.Execute();
+        GD.Print(graph.context.captionsOut[0]);
+        return graph.context.captionsOut;
+    }
+
+    public ExecutionTree BuildGraph(string fileName, SaveableCaption[] captions)
+    {
+        var context = new NodeExecutionContext {fileName = fileName, captionsIn = captions};
+        var tree = new ExecutionTree {context = context};
+        var nodesByName = GetNodes().ToDictionary(x => x.Name);
+        System.Collections.Generic.Dictionary<(StringName, int), (StringName, int)> valueSources = new ();
+        foreach (var connection in Connections)
+        {
+            var fromNode = connection["from_node"].AsStringName();
+            var fromPort = connection["from_port"].AsInt32();
+            var toNode = connection["to_node"].AsStringName();
+            var toPort = connection["to_port"].AsInt32();
+            
+            valueSources[(toNode, toPort)] = (fromNode, fromPort);
+        }
+
+        var outputNode = FindConnections(OutputNode.Name, nodesByName, new (), valueSources);
+        tree.output = outputNode;
+        
+        return tree;
+    }
+
+    public ExecutionNode FindConnections(StringName originNode, System.Collections.Generic.Dictionary<StringName, CustomNode> nodesByName, System.Collections.Generic.Dictionary<StringName, ExecutionNode> nodeHistory, System.Collections.Generic.Dictionary<(StringName, int), (StringName, int)> valueSources)
+    {
+        var node = nodesByName[originNode];
+        var inputCount = node.GetInputPortCount();
+        var thisNode = new ExecutionNode {node = node.core, uiValues = node.GetControlValues()};
+        for (int i = 0; i < inputCount; i++)
+        {
+            var source = valueSources[(node.Name, i)];
+            ExecutionNode sourceNode;
+            if (nodeHistory.ContainsKey(source.Item1))
+            {
+                sourceNode = nodeHistory[source.Item1];
+            }
+            else
+            {
+                sourceNode = FindConnections(source.Item1, nodesByName, nodeHistory, valueSources); // Recursively trace back the node graph
+            }
+            thisNode.inputConnections.Add((sourceNode, source.Item2, i));
+        }
+
+        return thisNode;
     }
 }
