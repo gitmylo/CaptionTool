@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://cot6blxye5n0r"]
+[gd_scene load_steps=34 format=3 uid="uid://cot6blxye5n0r"]
 
 [ext_resource type="Script" uid="uid://ktq1ukfbueuc" path="res://scripts/NewUI.cs" id="1_wmd31"]
 [ext_resource type="Script" uid="uid://bfs3hnhkf54ey" path="res://scripts/util/SettingsUI.cs" id="2_d134i"]
@@ -9,8 +9,10 @@
 [ext_resource type="Script" uid="uid://dw4ai3d4hdkbf" path="res://scripts/util/LLMCaptionButton.cs" id="4_x3v8y"]
 [ext_resource type="Script" uid="uid://ca5ecxc62xgpl" path="res://scripts/globalsettingclasses/GlobalSetting.cs" id="6_4mqxk"]
 [ext_resource type="Script" uid="uid://bua837x6fq2df" path="res://scripts/graph/GraphManager.cs" id="7_4htuh"]
+[ext_resource type="PackedScene" uid="uid://c3eo2e7mdpl7j" path="res://scripts/ui/SaveWorkflowPopup.tscn" id="7_kqcfq"]
 [ext_resource type="Resource" uid="uid://b16ghggybel45" path="res://config/NodeConsts.tres" id="8_oq113"]
 [ext_resource type="PackedScene" uid="uid://3j7jmlmf2bex" path="res://scripts/graph/Nodes/impl/Hidden/input_node.tscn" id="8_wesyw"]
+[ext_resource type="PackedScene" uid="uid://c8wwlm0huaau3" path="res://prefabs/SavedWorkflow.tscn" id="8_wh2er"]
 [ext_resource type="PackedScene" uid="uid://clf3xtt3fm7m0" path="res://scripts/graph/Nodes/impl/Hidden/output_node.tscn" id="9_6xpl8"]
 [ext_resource type="PackedScene" uid="uid://b4x2y58omdshf" path="res://scripts/graph/Nodes/NodeButton.tscn" id="10_oq113"]
 [ext_resource type="Script" uid="uid://de32y8uwvvh65" path="res://scripts/graph/Nodes/impl/scripts/InputNode.cs" id="13_kqcfq"]
@@ -137,11 +139,13 @@ item_2/text = "Exit"
 item_2/id = 2
 
 [node name="Workflow" type="PopupMenu" parent="VBoxContainer/MenuBar" node_paths=PackedStringArray("showPlace", "hidePlace", "tabs")]
-item_count = 2
+item_count = 3
 item_0/text = "Save"
 item_0/id = 0
 item_1/text = "Save as"
 item_1/id = 1
+item_2/text = "Refresh saved"
+item_2/id = 2
 script = ExtResource("3_56ssd")
 showPlace = NodePath("..")
 hidePlace = NodePath("../../HidePlace")
@@ -311,6 +315,9 @@ layout_mode = 2
 split_offset = 400
 metadata/_tab_index = 1
 
+[node name="SaveWorkflowPopup" parent="VBoxContainer/TabContainer/Workflow" instance=ExtResource("7_kqcfq")]
+visible = false
+
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow"]
 layout_mode = 2
 
@@ -336,18 +343,29 @@ current_tab = 0
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "No workflow selected"
 horizontal_alignment = 1
 
-[node name="Workflows" type="Tree" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
-visible = false
+[node name="RefreshButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/HBoxContainer"]
+layout_mode = 2
+text = "Refresh"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
 layout_mode = 2
 size_flags_vertical = 3
-hide_root = true
 
-[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "popup", "popupSearchBox", "availableNodes", "testFileButton", "processAllButton", "scroll")]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "popup", "popupSearchBox", "availableNodes", "saveDialog", "testFileButton", "processAllButton", "scroll", "popupMenu", "currentWorkflowLabel", "refreshButton", "savedGraphList")]
 layout_mode = 2
 size_flags_vertical = 3
 right_disconnects = true
@@ -359,9 +377,15 @@ popup = NodePath("PopupPanel")
 popupSearchBox = NodePath("PopupPanel/VBoxContainer/SearchBox")
 availableNodes = NodePath("PopupPanel/VBoxContainer/ScrollContainer/ItemsList")
 nodeButtonScene = ExtResource("10_oq113")
+saveDialog = NodePath("../SaveWorkflowPopup")
 testFileButton = NodePath("../VBoxContainer/HBoxContainer/TestButton")
 processAllButton = NodePath("../VBoxContainer/HBoxContainer/ProcessAllButton")
 scroll = NodePath("PopupPanel/VBoxContainer/ScrollContainer")
+popupMenu = NodePath("../../../MenuBar/Workflow")
+currentWorkflowLabel = NodePath("../VBoxContainer/TabContainer/Saved/HBoxContainer/Label")
+refreshButton = NodePath("../VBoxContainer/TabContainer/Saved/HBoxContainer/RefreshButton")
+savedGraphList = NodePath("../VBoxContainer/TabContainer/Saved/ScrollContainer/VBoxContainer")
+workflowListItemScene = ExtResource("8_wh2er")
 
 [node name="PopupPanel" type="PopupPanel" parent="VBoxContainer/TabContainer/Workflow/GraphEdit"]
 size = Vector2i(303, 300)

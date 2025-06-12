@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CaptionTool.scripts.graph.Nodes;
 using CaptionTool.scripts.graph.Nodes.impl.scripts;
+using CaptionTool.scripts.ui;
 using CaptionTool.scripts.util;
 using Godot;
 using Godot.Collections;
@@ -13,8 +14,8 @@ public partial class GraphManager: GraphEdit
 {
     [Export] public NodeConsts consts;
     
-    [Export] private GraphNode InputNode;
-    [Export] private GraphNode OutputNode;
+    [Export] private CustomNode InputNode;
+    [Export] private CustomNode OutputNode;
     
     [ExportCategory("Popup")]
     [Export] private Popup popup;
@@ -22,16 +23,30 @@ public partial class GraphManager: GraphEdit
     [Export] private VBoxContainer availableNodes; // Contains NodeButton entries
     [Export] private PackedScene nodeButtonScene;
 
+    [Export] private SaveWorkflowPopup saveDialog;
+
+    [ExportCategory("UI components")]
     [Export] private Button testFileButton;
     [Export] private Button processAllButton;
     [Export] private ScrollContainer scroll;
+    
+    [Export] private PopupMenu popupMenu;
+    [Export] private Label currentWorkflowLabel;
+
+    [Export] private Button refreshButton;
+    [Export] private VBoxContainer savedGraphList;
+    [Export] private PackedScene workflowListItemScene;
 
     private Vector2 lastPopup;
+    private string loadedWorkflow;
 
     public override void _Ready()
     {
         InitConnection();
         InitNodeButtons();
+
+        InputNode.nodeDef = consts.inputNodeDef;
+        OutputNode.nodeDef = consts.outputNodeDef;
 
         foreach (var type in consts.types)
         {
@@ -60,6 +75,29 @@ public partial class GraphManager: GraphEdit
             result.Wait();
             var output = result.Result;
         };
+
+        saveDialog.manager = this;
+
+        popupMenu.IdPressed += id =>
+        {
+            switch (id)
+            {
+                case 0: // Save
+                    if (loadedWorkflow != null) SaveGraph(loadedWorkflow);
+                    else saveDialog.Show();
+                    break;
+                case 1: // Save as
+                    saveDialog.Show();
+                    break;
+                case 2: // Refresh saved
+                    RefreshSavedList();
+                    break;
+            }
+        };
+
+        refreshButton.Pressed += RefreshSavedList;
+        
+        RefreshSavedList();
     }
 
     private void UpdateSearch(string query)
@@ -100,29 +138,32 @@ public partial class GraphManager: GraphEdit
     {
         foreach (var node in consts.nodes)
         {
-            CreateNodeButton(node.name, node.description, node.node);
+            CreateNodeButton(node.name, node.description, node.node, node);
         }
     }
     
-    void CreateNodeButton(string name, string description, PackedScene node)
+    void CreateNodeButton(string name, string description, PackedScene node, NodeDef def)
     {
         var button = nodeButtonScene.Instantiate<NodeButton>();
         button.name = name;
         button.description = description;
         button.node = node;
         button.graph = this;
+        button.def = def;
         button.InitReady();
         availableNodes.AddChild(button);
     }
 
-    public void AddNode(PackedScene node)
+    public CustomNode AddNode(NodeDef def)
     {
-        var nodeInst = node.Instantiate<CustomNode>();
-        nodeInst.PositionOffset = lastPopup;
+        var nodeInst = def.node.Instantiate<CustomNode>();
+        nodeInst.PositionOffset = lastPopup + ScrollOffset; // TODO: Account for zoom
         nodeInst.graph = this;
+        nodeInst.nodeDef = def;
         AddChild(nodeInst);
         
         popup.Visible = false;
+        return nodeInst;
     }
 
     void InitConnection()
@@ -187,5 +228,157 @@ public partial class GraphManager: GraphEdit
         }
 
         return thisNode;
+    }
+
+    private string WorkflowSavePath(string fileName, bool withUser = true)
+    {
+        DirAccess.Open("user://").MakeDirRecursive("workflows/" + fileName.GetBaseDir());
+        return (withUser ? "user://workflows/" : "workflows/") + fileName;
+    }
+
+    public void SaveGraph(string fileName)
+    {
+        var path = WorkflowSavePath(fileName);
+        var nodes = GetNodes();
+        Godot.Collections.Dictionary<string, Variant> saveable = new ();
+        Array<Godot.Collections.Dictionary<string, Variant>> nodeValues = new ();
+        foreach (var node in nodes)
+        {
+            Godot.Collections.Dictionary<string, Variant> value = new();
+            value["id"] = node.nodeDef.identifier;
+            value["name"] = node.Name;
+            value["position"] = node.PositionOffset - ScrollOffset;
+            value["fieldValues"] = node.GetValues();
+            nodeValues.Add(value);
+        }
+        
+        saveable["nodes"] = nodeValues;
+        saveable["connections"] = Connections;
+
+        var serialized = Json.Stringify(saveable);
+        using (var file = FileAccess.Open(path, FileAccess.ModeFlags.Write))
+        {
+            file.StoreString(serialized);
+        }
+        RefreshSavedList();
+        SelectNewWorkflow(fileName);
+    }
+
+    public void LoadGraph(string fileName)
+    {
+        var path = WorkflowSavePath(fileName);
+
+        string serialized;
+        using (var file = FileAccess.Open(path, FileAccess.ModeFlags.Read))
+        {
+            serialized = file.GetAsText();
+        }
+
+        var loadable = Json.ParseString(serialized).AsGodotDictionary();
+        var nodeValues = loadable["nodes"].AsGodotArray<Godot.Collections.Dictionary<string, Variant>>();
+        
+        ClearConnections();
+        // Clear nodes from graph (excluding input/output)
+        var oldNodes = GetNodes();
+        foreach (var oldNode in oldNodes)
+        {
+            oldNode.Name = oldNode.Name + "_DELETING";
+            oldNode.QueueFree();
+        }
+
+        foreach (var nodeValue in nodeValues)
+        {
+            string id = nodeValue["id"].AsString();
+            StringName name = nodeValue["name"].AsStringName();
+            var position = nodeValue["position"].AsVector2() + ScrollOffset;
+            var fieldValues = nodeValue["fieldValues"].AsGodotDictionary<StringName, Variant>();
+
+            var def = LookupNode(id);
+            var node = AddNode(def);
+            if (node.nodeDef.identifier == "output") OutputNode = node;
+            if (node.nodeDef.identifier == "input") InputNode = node;
+            
+            node.Name = name;
+            node.PositionOffset = position;
+            node.SetValues(fieldValues);
+        }
+        
+        Connections = loadable["connections"].AsGodotArray<Dictionary>(); // Link the nodes
+        
+        SelectNewWorkflow(fileName);
+    }
+
+    public void RenameGraph(string oldName, string newName)
+    {
+        var oldLoc = WorkflowSavePath(oldName, false);
+        var newLoc = WorkflowSavePath(newName, false);
+        using (var access = DirAccess.Open("user://"))
+        {
+            if (access.Copy(oldLoc, newLoc) == Error.Ok)
+            {
+                access.Remove(oldLoc);
+            }
+        }
+        RefreshSavedList();
+        if (oldName == loadedWorkflow) SelectNewWorkflow(newName);
+    }
+
+    public void DeleteGraph(string name)
+    {
+        var loc  = WorkflowSavePath(name, false);
+        using (var access = DirAccess.Open("user://"))
+        {
+            access.Remove(loc);
+        }
+        RefreshSavedList();
+        if (name == loadedWorkflow) SelectNewWorkflow(null);
+    }
+
+    public void RefreshSavedList()
+    {
+        var children = savedGraphList.GetChildren();
+        foreach (var child in children)
+        {
+            child.QueueFree();
+        }
+        
+        string[] files;
+        using (var dir = DirAccess.Open("user://workflows"))
+        {
+            files = dir.GetFiles();
+        }
+        foreach (var file in files)
+        {
+            var item = workflowListItemScene.Instantiate<WorkflowListItem>();
+            item.manager = this;
+            item.relatedWorkflow = file;
+            savedGraphList.AddChild(item);
+        }
+    }
+
+    public void SelectNewWorkflow(string name)
+    {
+        loadedWorkflow = name;
+        if (name == null)
+        {
+            currentWorkflowLabel.Text = "No workflow selected";
+        }
+        else
+        {
+            currentWorkflowLabel.Text = name;
+        }
+    }
+
+    public NodeDef LookupNode(string identifier)
+    {
+        switch (identifier)
+        {
+            case "input":
+                return consts.inputNodeDef;
+            case "output":
+                return consts.outputNodeDef;
+        }
+        
+        return consts.nodes.FirstOrDefault(x => x.identifier == identifier);
     }
 }

@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://closxa2pn6i6n"]
+
+[ext_resource type="Script" uid="uid://dve3b00g5n0xd" path="res://scripts/ui/RenameWorkflowPopup.cs" id="1_h4w81"]
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" node_paths=PackedStringArray("fileNameBox", "confirmLabel")]
+initial_position = 2
+size = Vector2i(330, 115)
+visible = true
+ok_button_text = "Save"
+dialog_autowrap = true
+script = ExtResource("1_h4w81")
+fileNameBox = NodePath("VBoxContainer/LineEdit")
+confirmLabel = NodePath("VBoxContainer/Label")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 322.0
+offset_bottom = 66.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Please type a filename for this workflow"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "workflow"
+placeholder_text = "workflow"

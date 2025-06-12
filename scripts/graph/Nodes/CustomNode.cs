@@ -13,6 +13,7 @@ public partial class CustomNode : GraphNode
     [Export] public bool required; // Required nodes are not deletable
     [Export] public GraphManager graph;
     [Export] public ExecutionCore core;
+    [Export] public NodeDef nodeDef;
     
     [Export] public Array<Control> controls = new ();
 
@@ -34,6 +35,30 @@ public partial class CustomNode : GraphNode
         }
     }
 
+    public void SetValues(Dictionary<StringName, Variant> values)
+    {
+        foreach (var control in controls)
+        {
+            if (values.ContainsKey(control.Name))
+            {
+                SetValueToControl(control,  values[control.Name]);
+            }
+        }
+    }
+
+    public Dictionary<StringName, Variant> GetValues()
+    {
+        var dict = new Dictionary<StringName, Variant>();
+
+        foreach (var control in controls)
+        {
+            if (control == null) continue;
+            dict[control.Name] = GetValueFromControl(control);
+        }
+        
+        return dict;
+    }
+
     public Array GetControlValues()
     {
         Array outArray = new Array();
@@ -46,7 +71,7 @@ public partial class CustomNode : GraphNode
     }
 
     // Used to get the values from the controls for the execution cores to use
-    public Variant GetValueFromControl(Control control)
+    public Variant GetValueFromControl(Control control, bool forSaving = false)
     {
         switch (control)
         {
@@ -55,7 +80,7 @@ public partial class CustomNode : GraphNode
             case LineEdit lineEdit:
                 return lineEdit.Text;
             case OptionButton optionButton:
-                return optionButton.GetItemText(optionButton.GetSelectedId());
+                return forSaving ? optionButton.Selected : optionButton.GetItemText(optionButton.GetSelectedId());
             case CheckBox button:
                 return button.IsPressed();
             case Slider slider:
@@ -64,5 +89,30 @@ public partial class CustomNode : GraphNode
                 return spinBox.Value;
         }
         throw new NotImplementedException();
+    }
+
+    public void SetValueToControl(Control control, Variant value)
+    {
+        switch (control)
+        {
+            case TextEdit textEdit:
+                textEdit.Text = value.AsString();
+                break;
+            case LineEdit lineEdit:
+                lineEdit.Text = value.AsString();
+                break;
+            case OptionButton optionButton:
+                optionButton.Select(value.AsInt32());
+                break;
+            case CheckBox button:
+                button.SetPressed(value.AsBool());
+                break;
+            case Slider slider:
+                slider.Value = value.AsDouble();
+                break;
+            case SpinBox spinBox:
+                spinBox.Value = value.AsDouble();
+                break;
+        }
     }
 }

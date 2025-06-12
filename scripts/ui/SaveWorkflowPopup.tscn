@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3eo2e7mdpl7j"]
+
+[ext_resource type="Script" uid="uid://c13etvsp11ysc" path="res://scripts/ui/SaveWorkflowPopup.cs" id="1_h3uwm"]
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" node_paths=PackedStringArray("fileNameBox")]
+initial_position = 2
+size = Vector2i(330, 115)
+visible = true
+ok_button_text = "Save"
+dialog_autowrap = true
+script = ExtResource("1_h3uwm")
+fileNameBox = NodePath("VBoxContainer/LineEdit")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 322.0
+offset_bottom = 66.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Please type a filename for this workflow"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "workflow"
+placeholder_text = "workflow"

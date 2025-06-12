@@ -7,7 +7,7 @@
 script = ExtResource("2_72nxc")
 metadata/_custom_type_script = "uid://bpdg5su0jbfni"
 
-[node name="FlowBottleneck" type="GraphNode" node_paths=PackedStringArray("controls")]
+[node name="FlowBottleneck" type="GraphNode"]
 custom_minimum_size = Vector2(0, 90)
 offset_right = 222.0
 offset_bottom = 90.0
@@ -34,7 +34,6 @@ slot/1/right_icon = null
 slot/1/draw_stylebox = true
 script = ExtResource("1_b1iab")
 core = SubResource("Resource_cfnqk")
-controls = [NodePath("")]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2

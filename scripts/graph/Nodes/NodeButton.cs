@@ -7,6 +7,8 @@ public partial class NodeButton : PanelContainer
     [Export] public string name;
     [Export] public string description;
 
+    [Export] public NodeDef def;
+
     [Export] private Label nameLabel;
     [Export] private Label descriptionLabel;
     [Export] private Button selectButton;
@@ -18,7 +20,7 @@ public partial class NodeButton : PanelContainer
     {
         selectButton.Pressed += () =>
         {
-            graph.AddNode(node);
+            graph.AddNode(def);
         };
     }
 
