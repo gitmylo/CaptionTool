@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using Godot;
+using Godot.Collections;
 using Array = Godot.Collections.Array;
 
 namespace CaptionTool.scripts.util;
@@ -165,4 +166,47 @@ public static class FfmpegUtil
     }
     
     // TODO: Frame extract, `ffmpeg -i troll.jpg -f image2pipe - > troll.png`
+    public static VideoInfo GetVideoInfo(string file)
+    {
+        string command = "ffprobe";
+        string[] parameters = ["-of", "json", "-select_streams", "v:0", "-show_entries", "stream=display_aspect_ratio,width,height,r_frame_rate:format=filename,size,duration"];
+
+        Array output = new Array();
+        OS.Execute(command, parameters, output);
+        
+        return VideoInfo.FromOutput(output[0].AsString());
+    }
+
+    public class VideoInfo
+    {
+        public int width, height, frameCount, fileSize;
+        public double duration, frameRate;
+        public string filename;
+
+        public VideoInfo(int width, int height, double duration, double frameRate, int frameCount, string filename,
+            int fileSize)
+        {
+            this.width = width;
+            this.height = height;
+            this.duration = duration;
+            this.frameRate = frameRate;
+            this.frameCount = frameCount;
+            this.filename = filename;
+            this.fileSize = fileSize;
+        }
+        
+        public static VideoInfo FromOutput(string output)
+        {
+            var dict = Json.ParseString(output).AsGodotDictionary<string, Variant>();
+            var firstStream = dict["streams"].AsGodotArray<Dictionary<String, Variant>>()[0];
+            var format = dict["format"].AsGodotDictionary<string, string>();
+
+            var frameRateStrings = firstStream["r_frame_rate"].AsString().Split("/");
+            var frameRate = (double)int.Parse(frameRateStrings[0]) / int.Parse(frameRateStrings[1]);
+            var duration = double.Parse(format["duration"], CultureInfo.InvariantCulture);
+            var size = int.Parse(format["size"]);
+
+            return new VideoInfo(firstStream["width"].AsInt32(), firstStream["height"].AsInt32(), duration, frameRate, (int)(duration * frameRate), format["filename"], size);
+        }
+    }
 }

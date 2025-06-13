@@ -36,7 +36,7 @@ public partial class NewUI : Node
     [Export] private ItemList EntryList;
 
     [Export] private Label activeVidLabel;
-    private string activeVid;
+    public string activeVid;
     private SaveableCaption[] captions;
     private int selectedCaption = -1; // Idx of selected caption, -1 if nothing is selected
     private double activeDuration;
@@ -60,9 +60,9 @@ public partial class NewUI : Node
     [Export] private PackedScene progressBarScene;
     [Export] private LineEdit exportFlags;
 
-    private string CaptionFileFor(string original) =>
+    public string CaptionFileFor(string original) =>
         selectedWorkspace.PathJoin(config.procDir).PathJoin(original.TrimPrefix(sourceDir)).GetBaseName() + ".json";
-    private string captionsTemplateFile => selectedWorkspace.PathJoin(config.procDir).PathJoin(activeVid.TrimPrefix(sourceDir)).GetBaseName() + ".json";
+    public string captionsTemplateFile => CaptionFileFor(activeVid);// selectedWorkspace.PathJoin(config.procDir).PathJoin(activeVid.TrimPrefix(sourceDir)).GetBaseName() + ".json";
     
     #endregion
 
@@ -361,6 +361,22 @@ public partial class NewUI : Node
             child.SetTooltipText(0, basePath.PathJoin(file));
         }
     }
+
+    public List<string> GetAllFilePathsRecursive(string basePath, List<string> addTo = null)
+    {
+        if (addTo == null) addTo = new List<string>();
+        foreach (var dir in DirAccess.GetDirectoriesAt(basePath))
+        {
+            GetAllFilePathsRecursive(basePath.PathJoin(dir), addTo);
+        }
+
+        foreach (var file in DirAccess.GetFilesAt(basePath))
+        {
+            addTo.Add(basePath.PathJoin(file));
+        }
+
+        return addTo;
+    }
     
     public void ResetSliders()
     {
@@ -432,10 +448,22 @@ public partial class NewUI : Node
 
     public void SaveCaptionsForCurrent()
     {
-        string targetPath = captionsTemplateFile;
+        SaveCaptionFor(activeVid, captions);
+        // string targetPath = captionsTemplateFile;
+        // string value = JsonConvert.SerializeObject(captions);
+        // DirAccess.MakeDirRecursiveAbsolute(targetPath.GetBaseDir());
+        // using (var f = FileAccess.Open(targetPath, FileAccess.ModeFlags.Write))
+        // {
+        //     f.StoreString(value);
+        // }
+    }
+
+    public void SaveCaptionFor(string target, SaveableCaption[] captions)
+    {
+        string targetPath = CaptionFileFor(target);
         string value = JsonConvert.SerializeObject(captions);
         DirAccess.MakeDirRecursiveAbsolute(targetPath.GetBaseDir());
-        using (var f = FileAccess.Open(targetPath, FileAccess.ModeFlags.Write))
+        using (var f  = FileAccess.Open(targetPath, FileAccess.ModeFlags.Write))
         {
             f.StoreString(value);
         }

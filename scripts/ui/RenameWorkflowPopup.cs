@@ -10,9 +10,11 @@ public partial class RenameWorkflowPopup : ConfirmationDialog
     
     public string oldName;
     public GraphManager manager;
-    public override void _Ready()
+
+    public void ManualReady()
     {
-        confirmLabel.Text = $"Please type a filename for this workflow. (was {oldName}";
+        confirmLabel.Text = $"Please type a filename for this workflow. (was {oldName})";
+        fileNameBox.Text = oldName;
         Confirmed += () =>
         {
             manager.RenameGraph(oldName, fileNameBox.Text);

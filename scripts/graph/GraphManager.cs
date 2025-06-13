@@ -17,6 +17,8 @@ public partial class GraphManager: GraphEdit
     
     [Export] private CustomNode InputNode;
     [Export] private CustomNode OutputNode;
+
+    [Export] private NewUI ui;
     
     [ExportCategory("Popup")]
     [Export] private Popup popup;
@@ -72,9 +74,9 @@ public partial class GraphManager: GraphEdit
 
         testFileButton.Pressed += () =>
         {
-            var result = ExecuteGraphForInput();
+            var result = ExecuteGraphForInput(ui.activeVid);
             result.Wait();
-            var output = result.Result;
+            GD.Print(result.Result);
         };
 
         saveDialog.manager = this;
@@ -177,13 +179,18 @@ public partial class GraphManager: GraphEdit
         return GetChildren().Where(x => x is CustomNode).Cast<CustomNode>().ToList();
     }
 
-    public async Task<SaveableCaption[]> ExecuteGraphForInput()
+    public async Task<SaveableCaption[]> ExecuteGraphForInput(string target)
     {
-        var graph = BuildGraph("Example.mp4",
-            new SaveableCaption[] { new SaveableCaption { bypassduration = true, caption = "This is a caption" } });
+        // var graph = BuildGraph("Example.mp4",
+        //     new SaveableCaption[] { new SaveableCaption { bypassduration = true, caption = "This is a caption" } });
+        // await graph.Execute();
+        // GD.Print(graph.context.captionsOut[0]);
+        // return graph.context.captionsOut;
+        var inCaptions = ui.CaptionsForVideo(target);
+        var graph = BuildGraph(target, inCaptions);
         await graph.Execute();
-        GD.Print(graph.context.captionsOut[0]);
-        return graph.context.captionsOut;
+        ui.SaveCaptionFor(target, graph.context.captionsOut);
+        return graph.context.captionsOut.ToArray();
     }
 
     public ExecutionTree BuildGraph(string fileName, SaveableCaption[] captions)
@@ -215,6 +222,7 @@ public partial class GraphManager: GraphEdit
         var thisNode = new ExecutionNode {node = node.core, uiValues = node.GetControlValues()};
         for (int i = 0; i < inputCount; i++)
         {
+            // TODO: If the connection doesn't exist, show an error indicating that a connection is missing
             var source = valueSources[(node.Name, i)];
             ExecutionNode sourceNode;
             if (nodeHistory.ContainsKey(source.Item1))
@@ -312,16 +320,19 @@ public partial class GraphManager: GraphEdit
 
     public void RenameGraph(string oldName, string newName)
     {
-        var oldLoc = WorkflowSavePath(oldName, false);
-        var newLoc = WorkflowSavePath(newName, false);
-        using (var access = DirAccess.Open("user://"))
+        var oldLoc = WorkflowSavePath(oldName, true);
+        var newLoc = WorkflowSavePath(newName, true);
+        string loaded;
+        using (var f = FileAccess.Open(oldLoc, FileAccess.ModeFlags.Read))
         {
-            if (access.Copy(oldLoc, newLoc) == Error.Ok)
-            {
-                access.Remove(oldLoc);
-            }
+            loaded = f.GetAsText();
         }
-        RefreshSavedList();
+        using (var f = FileAccess.Open(newLoc, FileAccess.ModeFlags.Write))
+        {
+            f.StoreString(loaded);
+        }
+        // RefreshSavedList();
+        DeleteGraph(oldName);
         if (oldName == loadedWorkflow) SelectNewWorkflow(newName);
     }
 
@@ -382,5 +393,30 @@ public partial class GraphManager: GraphEdit
         }
         
         return consts.nodes.FirstOrDefault(x => x.identifier == identifier);
+    }
+
+    public override void _GuiInput(InputEvent @event)
+    {
+        if (@event is InputEventKey eventKey && eventKey.Pressed)
+        {
+            var mods = eventKey.GetModifiersMask();
+            if (eventKey.Keycode == Key.S && (mods & KeyModifierMask.MaskCtrl) != 0)
+            {
+                if ((mods & KeyModifierMask.MaskShift) != 0)
+                {
+                    saveDialog.Show();
+                }
+                else
+                {
+                    if (loadedWorkflow != null) SaveGraph(loadedWorkflow);
+                    else saveDialog.Show();
+                }
+            }
+
+            if (eventKey.Keycode == Key.R && (mods & KeyModifierMask.MaskCtrl) != 0)
+            {
+                RefreshSavedList();
+            }
+        }
     }
 }

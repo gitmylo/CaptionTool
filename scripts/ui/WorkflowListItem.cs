@@ -28,6 +28,9 @@ public partial class WorkflowListItem : Control
             manager.LoadGraph(relatedWorkflow);
         };
 
+        renameDialog.oldName = relatedWorkflow;
+        renameDialog.manager = manager;
+        renameDialog.ManualReady();
         RenameButton.Pressed += () =>
         {
             renameDialog.Show();
