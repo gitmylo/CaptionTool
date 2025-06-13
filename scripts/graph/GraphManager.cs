@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CaptionTool.scripts.graph.Nodes;
@@ -247,7 +248,7 @@ public partial class GraphManager: GraphEdit
             Godot.Collections.Dictionary<string, Variant> value = new();
             value["id"] = node.nodeDef.identifier;
             value["name"] = node.Name;
-            value["position"] = node.PositionOffset - ScrollOffset;
+            value["position"] = node.PositionOffset;
             value["fieldValues"] = node.GetValues();
             nodeValues.Add(value);
         }
@@ -290,7 +291,8 @@ public partial class GraphManager: GraphEdit
         {
             string id = nodeValue["id"].AsString();
             StringName name = nodeValue["name"].AsStringName();
-            var position = nodeValue["position"].AsVector2() + ScrollOffset;
+            var posTest = nodeValue["position"].AsString().TrimPrefix("(").TrimSuffix(")").Split(", ").Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray();
+            var position = new Vector2((float)posTest[0], (float)posTest[1]);
             var fieldValues = nodeValue["fieldValues"].AsGodotDictionary<StringName, Variant>();
 
             var def = LookupNode(id);
