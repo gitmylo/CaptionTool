@@ -169,7 +169,7 @@ public static class FfmpegUtil
     public static VideoInfo GetVideoInfo(string file)
     {
         string command = "ffprobe";
-        string[] parameters = ["-of", "json", "-select_streams", "v:0", "-show_entries", "stream=display_aspect_ratio,width,height,r_frame_rate:format=filename,size,duration"];
+        string[] parameters = ["-of", "json", "-select_streams", "v:0", "-show_entries", "stream=display_aspect_ratio,width,height,r_frame_rate:format=filename,size,duration", file];
 
         Array output = new Array();
         OS.Execute(command, parameters, output);

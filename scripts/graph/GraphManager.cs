@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CaptionTool.scripts.graph.Nodes;
 using CaptionTool.scripts.graph.Nodes.impl.scripts;
@@ -40,6 +41,14 @@ public partial class GraphManager: GraphEdit
     [Export] private VBoxContainer savedGraphList;
     [Export] private PackedScene workflowListItemScene;
 
+    [ExportCategory("Progress")]
+    [Export] private ProgressBar globalProgressBar;
+    [Export] private VBoxContainer progressItemsList;
+    [Export] private Button clearCompletedButton;
+    [Export] private Button cancelRunningButton;
+    [Export] private SpinBox maxThreadsBox;
+    [Export] private PackedScene progressItemScene;
+
     private Vector2 lastPopup;
     private string loadedWorkflow;
 
@@ -74,9 +83,13 @@ public partial class GraphManager: GraphEdit
 
         testFileButton.Pressed += () =>
         {
-            var result = ExecuteGraphForInput(ui.activeVid);
-            result.Wait();
-            GD.Print(result.Result);
+            ExecuteGraphForInput(ui.activeVid);
+            // TODO: Refresh UI as caption updated
+        };
+        processAllButton.Pressed += () =>
+        {
+            RunTrackers(ui.GetAllFilePathsRecursive(ui.sourceDir).ToArray());
+            // TODO: Refresh UI as caption updated
         };
 
         saveDialog.manager = this;
@@ -101,6 +114,16 @@ public partial class GraphManager: GraphEdit
         refreshButton.Pressed += RefreshSavedList;
         
         RefreshSavedList();
+
+        clearCompletedButton.Pressed += () =>
+        {
+            ClearCompletedProgressNodes();
+        };
+
+        cancelRunningButton.Pressed += () =>
+        {
+            CancelAllProgressNodes();
+        };
     }
 
     private void UpdateSearch(string query)
@@ -179,18 +202,36 @@ public partial class GraphManager: GraphEdit
         return GetChildren().Where(x => x is CustomNode).Cast<CustomNode>().ToList();
     }
 
-    public async Task<SaveableCaption[]> ExecuteGraphForInput(string target)
+    public void ExecuteGraphForInput(string target)
     {
-        // var graph = BuildGraph("Example.mp4",
-        //     new SaveableCaption[] { new SaveableCaption { bypassduration = true, caption = "This is a caption" } });
-        // await graph.Execute();
-        // GD.Print(graph.context.captionsOut[0]);
-        // return graph.context.captionsOut;
+        RunTrackers([target]);
+    }
+
+    public void RunTrackers(string[] targets)
+    {
+        var trackers = targets.Select(PrepareTracker).ToArray();
+        new Thread(() =>
+        {
+            Parallel.ForEach(trackers, new ParallelOptions { MaxDegreeOfParallelism = (int)maxThreadsBox.Value }, x =>
+            {
+                x.Execute();
+                var result = x.tree.output.context.captionsOut;
+                ui.SaveCaptionFor(x.tree.context.fileName, result);
+            });
+        }).Start();
+    }
+
+    public ExecutionTracker PrepareTracker(string target)
+    {
         var inCaptions = ui.CaptionsForVideo(target);
-        var graph = BuildGraph(target, inCaptions);
-        await graph.Execute();
-        ui.SaveCaptionFor(target, graph.context.captionsOut);
-        return graph.context.captionsOut.ToArray();
+        var graph = BuildGraph(target, inCaptions); // Graph is completely disconnected from godot nodes, only uses resources and is safe to use on a new thread.
+        var tracker = ExecutionTracker.FromTree(graph);
+
+        var trackerNode = progressItemScene.Instantiate<ProgressItem>();
+        trackerNode.Init(tracker, target);
+        progressItemsList.AddChild(trackerNode);
+        
+        return tracker;
     }
 
     public ExecutionTree BuildGraph(string fileName, SaveableCaption[] captions)
@@ -417,6 +458,25 @@ public partial class GraphManager: GraphEdit
             {
                 RefreshSavedList();
             }
+        }
+    }
+
+    public void ClearCompletedProgressNodes()
+    {
+        foreach (var child in progressItemsList.GetChildren().Where(x => x is ProgressItem).Cast<ProgressItem>())
+        {
+            if (child.Completed())
+            {
+                child.QueueFree();
+            }
+        }
+    }
+
+    public void CancelAllProgressNodes()
+    {
+        foreach (var child in progressItemsList.GetChildren().Where(x => x is ProgressItem).Cast<ProgressItem>())
+        {
+            child.Cancel();
         }
     }
 }

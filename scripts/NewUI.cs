@@ -45,12 +45,12 @@ public partial class NewUI : Node
     [Export] private ColorIndicator indicator;
     [Export] private Label rangeIndicatorText;
     
-    private Config config;
-    private string selectedWorkspace;
-    private string configPath => selectedWorkspace.PathJoin("workspace.json");
-    private string sourceDir => selectedWorkspace.PathJoin(config.inDir);
-    private string procDir => selectedWorkspace.PathJoin(config.procDir);
-    private string destDir => selectedWorkspace.PathJoin(config.outDir);
+    public Config config;
+    public string selectedWorkspace;
+    public string configPath => selectedWorkspace.PathJoin("workspace.json");
+    public string sourceDir => selectedWorkspace.PathJoin(config.inDir);
+    public string procDir => selectedWorkspace.PathJoin(config.procDir);
+    public string destDir => selectedWorkspace.PathJoin(config.outDir);
 
     [Export] private SpinBox threadCount;
 
@@ -356,12 +356,14 @@ public partial class NewUI : Node
 		
         foreach (var file in DirAccess.GetFilesAt(basePath))
         {
+            if (blacklist.Contains(file.GetExtension())) continue;
             var child = item.CreateChild();
             child.SetText(0, file);
             child.SetTooltipText(0, basePath.PathJoin(file));
         }
     }
 
+    private string[] blacklist = ["txt"];
     public List<string> GetAllFilePathsRecursive(string basePath, List<string> addTo = null)
     {
         if (addTo == null) addTo = new List<string>();
@@ -372,6 +374,7 @@ public partial class NewUI : Node
 
         foreach (var file in DirAccess.GetFilesAt(basePath))
         {
+            if (blacklist.Contains(file.GetExtension())) continue;
             addTo.Add(basePath.PathJoin(file));
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
@@ -16,6 +17,56 @@ public class ExecutionTree
     {
         output.context = context;
         await output.ExecuteRecursive();
+    }
+}
+
+public class ExecutionTracker
+{
+    public enum Status
+    {
+        Idle,
+        Running,
+        Success,
+        Failure
+    }
+
+    public Status status = Status.Idle;
+    public string errorMessage; // Only used on error
+    public CancellationTokenSource source;
+    public CancellationToken token;
+    public ExecutionTree tree;
+
+    public static ExecutionTracker FromTree(ExecutionTree tree)
+    {
+        var source = new CancellationTokenSource();
+        return new ExecutionTracker
+        {
+            status = Status.Idle,
+            tree = tree,
+            source = source,
+            token = source.Token
+        };
+    }
+
+    public void Execute()
+    {
+        status = Status.Running;
+        var task = tree.Execute();
+        task.Wait();
+        if (task.IsCompletedSuccessfully)
+        {
+            status = Status.Success;
+        }
+        else
+        {
+            status = Status.Failure;
+            errorMessage = task.Exception?.Message;
+        }
+    }
+
+    public void Cancel()
+    {
+        source.Cancel();
     }
 }
 

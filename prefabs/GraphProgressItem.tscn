@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://c548jk6upvt7j"]
+
+[ext_resource type="Script" uid="uid://doxv0emgjy6ba" path="res://scripts/ColorIndicator.cs" id="1_fj3fe"]
+[ext_resource type="Script" uid="uid://b0f0oec5rhdyf" path="res://scripts/graph/ProgressItem.cs" id="1_ru8xb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yeaql"]
+bg_color = Color(0.0728426, 0.0728426, 0.0728426, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0745098, 0.0745098, 0.0745098, 1)
+border_blend = true
+
+[node name="PanelContainer" type="PanelContainer" node_paths=PackedStringArray("bar", "indicator", "nameLabel", "removeButton")]
+offset_right = 71.0
+offset_bottom = 23.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yeaql")
+script = ExtResource("1_ru8xb")
+bar = NodePath("GraphProgressItem/HBoxContainer/ProgressBar")
+indicator = NodePath("GraphProgressItem/HBoxContainer/ColorRect")
+nameLabel = NodePath("GraphProgressItem/Label")
+removeButton = NodePath("GraphProgressItem/Button")
+
+[node name="GraphProgressItem" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GraphProgressItem"]
+layout_mode = 2
+text = "Filename goes here"
+text_overrun_behavior = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GraphProgressItem"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="GraphProgressItem/HBoxContainer"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+color = Color(1, 0.983333, 0, 1)
+script = ExtResource("1_fj3fe")
+
+[node name="ProgressBar" type="ProgressBar" parent="GraphProgressItem/HBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+show_percentage = false
+
+[node name="Button" type="Button" parent="GraphProgressItem"]
+layout_mode = 2
+text = "Cancel/Remove"
