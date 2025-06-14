@@ -33,7 +33,7 @@ public class ExecutionTracker
     }
 
     public Status status = Status.Idle;
-    public string errorMessage, stackTrace; // Only used on error
+    public string errorMessage; // Only used on error
     public Exception? error;
     public CancellationTokenSource source;
     public CancellationToken token;
@@ -55,15 +55,21 @@ public class ExecutionTracker
     {
         status = Status.Running;
         var task = tree.Execute();
-        task.Wait();
-        if (task.IsCompletedSuccessfully)
+        try
         {
-            status = Status.Success;
+            task.Wait(token);
         }
-        else
+        finally
         {
-            status = Status.Failure;
-            errorMessage = task.Exception?.Message;
+            if (task.IsCompletedSuccessfully)
+            {
+                status = Status.Success;
+            }
+            else
+            {
+                status = Status.Failure;
+                errorMessage = task.Exception?.Message;
+            }
         }
     }
 

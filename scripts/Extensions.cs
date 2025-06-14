@@ -44,4 +44,9 @@ public static class Extensions
             return outList.ToArray();
         }
     }
+
+    public static (T1, T2)[] GrowZip<[MustBeVariant] T1, [MustBeVariant] T2>(this Array array, Array other)
+    {
+        return array.FromUGdArray<T1>().GrowZip(other.FromUGdArray<T2>());
+    }
 }

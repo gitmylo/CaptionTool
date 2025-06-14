@@ -12,7 +12,7 @@ public partial class RegexReplace : ExecutionCore
     public override async Task<Array<Array>> Execute(Array<Array> inputs, NodeExecutionContext context, Array values)
     {
         var regexes = inputs[0];
-        var targetsAndReplacements = inputs[1].FromUGdArray<string>().GrowZip(inputs[2].FromUGdArray<string>());
+        var targetsAndReplacements = inputs[1].GrowZip<string, string>(inputs[2]);
         var matchAll = values[0].AsBool();
         var results = new Array();
         foreach (var regex in regexes)

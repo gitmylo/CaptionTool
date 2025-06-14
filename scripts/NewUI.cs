@@ -447,7 +447,7 @@ public partial class NewUI : Node
             value = f.GetAsText();
         }
 
-        return JsonConvert.DeserializeObject<SaveableCaption[]>(value);
+        return JsonConvert.DeserializeObject<SaveableCaption[]>(value) ?? new SaveableCaption[]{};
     }
 
     public void SaveCaptionsForCurrent()
@@ -603,7 +603,7 @@ public partial class NewUI : Node
             var captions = CaptionsForVideo(path);
             if (captions.Length == 0)
             {
-                current.Add(new ExportableEntry(path, 0, config, new SaveableCaption() {bypassduration = true}));
+                current.Add(new ExportableEntry(path, 0, config, new SaveableCaption {bypassduration = true}));
             }
             else for (int i = 0; i < captions.Length; i++)
             {

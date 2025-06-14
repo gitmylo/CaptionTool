@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4gwo1nljkorm"]
+
+[ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_s76pw"]
+[ext_resource type="Script" uid="uid://c83dlydxilbwu" path="res://scripts/graph/Nodes/impl/scripts/stringfunc/StringFunc1.cs" id="2_sy2h1"]
+
+[sub_resource type="Resource" id="Resource_rvxyt"]
+script = ExtResource("2_sy2h1")
+metadata/_custom_type_script = "uid://c83dlydxilbwu"
+
+[node name="StringFunc1v" type="GraphNode" node_paths=PackedStringArray("controls")]
+custom_minimum_size = Vector2(0, 90)
+offset_right = 222.0
+offset_bottom = 90.0
+mouse_filter = 1
+resizable = true
+title = "String func (1)"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 3
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+script = ExtResource("1_s76pw")
+core = SubResource("Resource_rvxyt")
+controls = [NodePath("OptionButton")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Input"
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Output"
+horizontal_alignment = 2
+
+[node name="OptionButton" type="OptionButton" parent="."]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "basedir"
+popup/item_0/id = 0
+popup/item_1/text = "basename"
+popup/item_1/id = 1
+popup/item_2/text = "fileext"
+popup/item_2/id = 2
+popup/item_3/text = "urlencode"
+popup/item_3/id = 3

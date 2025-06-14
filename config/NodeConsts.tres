@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NodeConsts" load_steps=34 format=3 uid="uid://b16ghggybel45"]
+[gd_resource type="Resource" script_class="NodeConsts" load_steps=40 format=3 uid="uid://b16ghggybel45"]
 
 [ext_resource type="Script" uid="uid://defbj104bmdy5" path="res://scripts/graph/Nodes/NodeDef.cs" id="1_1yax3"]
 [ext_resource type="Resource" uid="uid://d17cd8arm2mk0" path="res://config/InputNodeDef.tres" id="1_dn27j"]
@@ -16,6 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://hrfpg7y8gpqq" path="res://scripts/graph/Nodes/impl/regex/regex_replace.tscn" id="11_orlgk"]
 [ext_resource type="PackedScene" uid="uid://c7tua1yy6teop" path="res://scripts/graph/Nodes/impl/ffmpeg/ffprobe_info.tscn" id="13_cql34"]
 [ext_resource type="Resource" uid="uid://bqw0r2ch1qu1m" path="res://config/OutputNodeDef.tres" id="13_isn6l"]
+[ext_resource type="PackedScene" uid="uid://b4gwo1nljkorm" path="res://scripts/graph/Nodes/impl/stringfunc/stringfunc1.tscn" id="14_or4qp"]
+[ext_resource type="PackedScene" uid="uid://buksqd1lo8ve4" path="res://scripts/graph/Nodes/impl/stringfunc/stringfunc2.tscn" id="15_g3k6o"]
+[ext_resource type="PackedScene" uid="uid://x5hkc4ru5t7r" path="res://scripts/graph/Nodes/impl/file/readfile.tscn" id="16_g3k6o"]
 
 [sub_resource type="Resource" id="Resource_g3gri"]
 script = ExtResource("1_1yax3")
@@ -105,6 +108,30 @@ identifier = "ffmpeg.ffprobe"
 node = ExtResource("13_cql34")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
+[sub_resource type="Resource" id="Resource_cql34"]
+script = ExtResource("1_1yax3")
+name = "String func 1"
+description = "A string function with 1 input. Basedir, basename, fileext, urlencode."
+identifier = "stringfunc.1"
+node = ExtResource("14_or4qp")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_g3k6o"]
+script = ExtResource("1_1yax3")
+name = "String func 2"
+description = "A string function with 2 inputs. Concat, trimprefix, trimsuffix."
+identifier = "stringfunc.2"
+node = ExtResource("15_g3k6o")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_4fwhx"]
+script = ExtResource("1_1yax3")
+name = "Read file"
+description = "Reads the contents of a file to a string."
+identifier = "file.read"
+node = ExtResource("16_g3k6o")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
 [sub_resource type="Resource" id="Resource_m4mrw"]
 script = ExtResource("7_orlgk")
 id = 0
@@ -150,7 +177,7 @@ metadata/_custom_type_script = "uid://577oe5hg6jsn"
 [resource]
 script = ExtResource("6_e4mmj")
 types = Array[ExtResource("7_orlgk")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv"), SubResource("Resource_vlxtm")])
-nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp")])
+nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp"), SubResource("Resource_cql34"), SubResource("Resource_g3k6o"), SubResource("Resource_4fwhx")])
 inputNodeDef = ExtResource("1_dn27j")
 outputNodeDef = ExtResource("13_isn6l")
 AnyType = 5

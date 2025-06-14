@@ -240,7 +240,6 @@ public partial class GraphManager: GraphEdit
                 catch (Exception e)
                 {
                     x.errorMessage = e.Message;
-                    x.stackTrace = e.StackTrace;
                     x.error = e;
                 }
             });
@@ -336,6 +335,7 @@ public partial class GraphManager: GraphEdit
             value["id"] = node.nodeDef.identifier;
             value["name"] = node.Name;
             value["position"] = node.PositionOffset;
+            value["size"] = node.Size;
             value["fieldValues"] = node.GetValues();
             nodeValues.Add(value);
         }
@@ -380,15 +380,23 @@ public partial class GraphManager: GraphEdit
             StringName name = nodeValue["name"].AsStringName();
             var posTest = nodeValue["position"].AsString().TrimPrefix("(").TrimSuffix(")").Split(", ").Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray();
             var position = new Vector2((float)posTest[0], (float)posTest[1]);
+
             var fieldValues = nodeValue["fieldValues"].AsGodotDictionary<StringName, Variant>();
 
             var def = LookupNode(id);
             var node = AddNode(def);
             if (node.nodeDef.identifier == "output") OutputNode = node;
             if (node.nodeDef.identifier == "input") InputNode = node;
-            
+
             node.Name = name;
             node.PositionOffset = position;
+            if (nodeValue.ContainsKey("size"))
+            {
+                var sizeTest = nodeValue["size"].AsString().TrimPrefix("(").TrimSuffix(")").Split(", ").Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray();
+                var size = new Vector2((float)sizeTest[0], (float)sizeTest[1]);
+                node.Size = size;
+            }
+
             node.SetValues(fieldValues);
         }
         
@@ -401,18 +409,21 @@ public partial class GraphManager: GraphEdit
     {
         var oldLoc = WorkflowSavePath(oldName, true);
         var newLoc = WorkflowSavePath(newName, true);
+
+        bool wasLoaded = oldName == loadedWorkflow;
+        
         string loaded;
         using (var f = FileAccess.Open(oldLoc, FileAccess.ModeFlags.Read))
         {
             loaded = f.GetAsText();
         }
+        DeleteGraph(oldName);
         using (var f = FileAccess.Open(newLoc, FileAccess.ModeFlags.Write))
         {
             f.StoreString(loaded);
         }
-        // RefreshSavedList();
-        DeleteGraph(oldName);
-        if (oldName == loadedWorkflow) SelectNewWorkflow(newName);
+        RefreshSavedList();
+        if (wasLoaded) SelectNewWorkflow(newName);
     }
 
     public void DeleteGraph(string name)

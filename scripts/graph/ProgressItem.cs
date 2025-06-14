@@ -26,6 +26,7 @@ public partial class ProgressItem: Control
         };
         printErrorButton.Pressed += () =>
         {
+            GD.Print("ERROR");
             if (tracker.error != null)
             {
                 GD.Print(tracker.error.ToString());

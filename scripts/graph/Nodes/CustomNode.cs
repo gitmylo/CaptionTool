@@ -41,7 +41,7 @@ public partial class CustomNode : GraphNode
         {
             if (values.ContainsKey(control.Name))
             {
-                SetValueToControl(control,  values[control.Name]);
+                SetValueToControl(control,  values[control.Name], true);
             }
         }
     }
@@ -53,7 +53,7 @@ public partial class CustomNode : GraphNode
         foreach (var control in controls)
         {
             if (control == null) continue;
-            dict[control.Name] = GetValueFromControl(control);
+            dict[control.Name] = GetValueFromControl(control, true);
         }
         
         return dict;
@@ -91,7 +91,7 @@ public partial class CustomNode : GraphNode
         throw new NotImplementedException();
     }
 
-    public void SetValueToControl(Control control, Variant value)
+    public void SetValueToControl(Control control, Variant value, bool forLoading = false)
     {
         switch (control)
         {
@@ -102,7 +102,8 @@ public partial class CustomNode : GraphNode
                 lineEdit.Text = value.AsString();
                 break;
             case OptionButton optionButton:
-                optionButton.Select(value.AsInt32());
+                if (forLoading) optionButton.Selected = value.AsInt32();
+                else optionButton.Select(value.AsInt32());
                 break;
             case CheckBox button:
                 button.SetPressed(value.AsBool());
