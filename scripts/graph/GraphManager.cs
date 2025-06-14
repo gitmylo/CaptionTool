@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -26,6 +27,7 @@ public partial class GraphManager: GraphEdit
     [Export] private LineEdit popupSearchBox;
     [Export] private VBoxContainer availableNodes; // Contains NodeButton entries
     [Export] private PackedScene nodeButtonScene;
+    [Export] private AcceptDialog errorDialog;
 
     [Export] private SaveWorkflowPopup saveDialog;
 
@@ -84,12 +86,10 @@ public partial class GraphManager: GraphEdit
         testFileButton.Pressed += () =>
         {
             ExecuteGraphForInput(ui.activeVid);
-            // TODO: Refresh UI as caption updated
         };
         processAllButton.Pressed += () =>
         {
             RunTrackers(ui.GetAllFilePathsRecursive(ui.sourceDir).ToArray());
-            // TODO: Refresh UI as caption updated
         };
 
         saveDialog.manager = this;
@@ -124,6 +124,18 @@ public partial class GraphManager: GraphEdit
         {
             CancelAllProgressNodes();
         };
+    }
+
+    public override void _Process(double delta)
+    {
+        var list = progressItemsList.GetChildren().Where(x => x is ProgressItem).Cast<ProgressItem>().ToArray();
+        if (list.Length == 0)
+        {
+            globalProgressBar.Value = 0;
+            return;
+        }
+        var completed = list.Count(x => x.Completed());
+        globalProgressBar.Value = (float)completed / list.Length;
     }
 
     private void UpdateSearch(string query)
@@ -183,7 +195,7 @@ public partial class GraphManager: GraphEdit
     public CustomNode AddNode(NodeDef def)
     {
         var nodeInst = def.node.Instantiate<CustomNode>();
-        nodeInst.PositionOffset = lastPopup + ScrollOffset; // TODO: Account for zoom
+        nodeInst.PositionOffset = lastPopup + ScrollOffset;
         nodeInst.graph = this;
         nodeInst.nodeDef = def;
         AddChild(nodeInst);
@@ -210,13 +222,27 @@ public partial class GraphManager: GraphEdit
     public void RunTrackers(string[] targets)
     {
         var trackers = targets.Select(PrepareTracker).ToArray();
+        if (trackers.Any(x => x == null))
+        {
+            // Something went wrong, likely an ignored input, return.
+            return;
+        }
         new Thread(() =>
         {
             Parallel.ForEach(trackers, new ParallelOptions { MaxDegreeOfParallelism = (int)maxThreadsBox.Value }, x =>
             {
-                x.Execute();
-                var result = x.tree.output.context.captionsOut;
-                ui.SaveCaptionFor(x.tree.context.fileName, result);
+                try
+                {
+                    x.Execute();
+                    var result = x.tree.output.context.captionsOut;
+                    ui.SaveCaptionFor(x.tree.context.fileName, result);
+                }
+                catch (Exception e)
+                {
+                    x.errorMessage = e.Message;
+                    x.stackTrace = e.StackTrace;
+                    x.error = e;
+                }
             });
         }).Start();
     }
@@ -225,6 +251,8 @@ public partial class GraphManager: GraphEdit
     {
         var inCaptions = ui.CaptionsForVideo(target);
         var graph = BuildGraph(target, inCaptions); // Graph is completely disconnected from godot nodes, only uses resources and is safe to use on a new thread.
+        if (graph == null) return null;
+        
         var tracker = ExecutionTracker.FromTree(graph);
 
         var trackerNode = progressItemScene.Instantiate<ProgressItem>();
@@ -251,6 +279,8 @@ public partial class GraphManager: GraphEdit
         }
 
         var outputNode = FindConnections(OutputNode.Name, nodesByName, new (), valueSources);
+        if (outputNode == null) return null;
+        
         tree.output = outputNode;
         
         return tree;
@@ -263,7 +293,14 @@ public partial class GraphManager: GraphEdit
         var thisNode = new ExecutionNode {node = node.core, uiValues = node.GetControlValues()};
         for (int i = 0; i < inputCount; i++)
         {
-            // TODO: If the connection doesn't exist, show an error indicating that a connection is missing
+            // If the connection doesn't exist, show an error indicating that a connection is missing
+            if (!valueSources.ContainsKey((node.Name, i)))
+            {
+                errorDialog.DialogText = $"A node ({originNode}) is missing an input, please connect this node.";
+                errorDialog.PopupCentered();
+                return null;
+            }
+            
             var source = valueSources[(node.Name, i)];
             ExecutionNode sourceNode;
             if (nodeHistory.ContainsKey(source.Item1))
@@ -273,6 +310,7 @@ public partial class GraphManager: GraphEdit
             else
             {
                 sourceNode = FindConnections(source.Item1, nodesByName, nodeHistory, valueSources); // Recursively trace back the node graph
+                if (sourceNode == null) return null; // Error is infectious
             }
             thisNode.inputConnections.Add((sourceNode, source.Item2, i));
         }

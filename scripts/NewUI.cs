@@ -289,7 +289,6 @@ public partial class NewUI : Node
 
         captions = CaptionsForVideo(); // Try to get the already written captions.
         InitCaptionsList(captions.Length);
-        SelectCaption(0); // Try to select the first caption
         
         if (ImageExtensions.Contains(file.GetExtension().ToLower()))
         {
@@ -306,6 +305,8 @@ public partial class NewUI : Node
             playPause.Disabled = false;
             SelectVideo(file);
         }
+        
+        SelectCaption(0); // Try to select the first caption
     }
 
     void SelectImage(string file)

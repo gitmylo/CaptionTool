@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
+using Array = Godot.Collections.Array;
 
 namespace CaptionTool.scripts.graph.Nodes.impl.scripts;
 
@@ -31,7 +33,8 @@ public class ExecutionTracker
     }
 
     public Status status = Status.Idle;
-    public string errorMessage; // Only used on error
+    public string errorMessage, stackTrace; // Only used on error
+    public Exception? error;
     public CancellationTokenSource source;
     public CancellationToken token;
     public ExecutionTree tree;

@@ -12,7 +12,7 @@ border_width_bottom = 5
 border_color = Color(0.0745098, 0.0745098, 0.0745098, 1)
 border_blend = true
 
-[node name="PanelContainer" type="PanelContainer" node_paths=PackedStringArray("bar", "indicator", "nameLabel", "removeButton")]
+[node name="PanelContainer" type="PanelContainer" node_paths=PackedStringArray("bar", "indicator", "nameLabel", "removeButton", "printErrorButton")]
 offset_right = 71.0
 offset_bottom = 23.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_yeaql")
@@ -20,7 +20,8 @@ script = ExtResource("1_ru8xb")
 bar = NodePath("GraphProgressItem/HBoxContainer/ProgressBar")
 indicator = NodePath("GraphProgressItem/HBoxContainer/ColorRect")
 nameLabel = NodePath("GraphProgressItem/Label")
-removeButton = NodePath("GraphProgressItem/Button")
+removeButton = NodePath("GraphProgressItem/HBoxContainer2/CancelRemove")
+printErrorButton = NodePath("GraphProgressItem/HBoxContainer2/PrintErrorButton")
 
 [node name="GraphProgressItem" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(150, 0)
@@ -46,6 +47,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 show_percentage = false
 
-[node name="Button" type="Button" parent="GraphProgressItem"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="GraphProgressItem"]
 layout_mode = 2
+
+[node name="CancelRemove" type="Button" parent="GraphProgressItem/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Cancel/Remove"
+
+[node name="PrintErrorButton" type="Button" parent="GraphProgressItem/HBoxContainer2"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Print error"

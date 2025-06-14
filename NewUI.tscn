@@ -126,6 +126,20 @@ grow_vertical = 2
 
 [node name="HidePlace" type="Node" parent="VBoxContainer"]
 
+[node name="Workflow" type="PopupMenu" parent="VBoxContainer/HidePlace" node_paths=PackedStringArray("showPlace", "hidePlace", "tabs")]
+item_count = 3
+item_0/text = "Save"
+item_0/id = 0
+item_1/text = "Save as"
+item_1/id = 1
+item_2/text = "Refresh saved"
+item_2/id = 2
+script = ExtResource("3_56ssd")
+showPlace = NodePath("../../MenuBar")
+hidePlace = NodePath("..")
+tabs = NodePath("../../TabContainer")
+validTab = 1
+
 [node name="MenuBar" type="MenuBar" parent="VBoxContainer"]
 layout_mode = 2
 
@@ -138,20 +152,6 @@ item_1/text = "Refresh files"
 item_1/id = 1
 item_2/text = "Exit"
 item_2/id = 2
-
-[node name="Workflow" type="PopupMenu" parent="VBoxContainer/MenuBar" node_paths=PackedStringArray("showPlace", "hidePlace", "tabs")]
-item_count = 3
-item_0/text = "Save"
-item_0/id = 0
-item_1/text = "Save as"
-item_1/id = 1
-item_2/text = "Refresh saved"
-item_2/id = 2
-script = ExtResource("3_56ssd")
-showPlace = NodePath("..")
-hidePlace = NodePath("../../HidePlace")
-tabs = NodePath("../../TabContainer")
-validTab = 1
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -402,6 +402,7 @@ rounded = true
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]
 layout_mode = 2
+max_value = 1.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]
 layout_mode = 2
@@ -412,7 +413,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "ui", "popup", "popupSearchBox", "availableNodes", "saveDialog", "testFileButton", "processAllButton", "scroll", "popupMenu", "currentWorkflowLabel", "refreshButton", "savedGraphList", "globalProgressBar", "progressItemsList", "clearCompletedButton", "cancelRunningButton", "maxThreadsBox")]
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "ui", "popup", "popupSearchBox", "availableNodes", "errorDialog", "saveDialog", "testFileButton", "processAllButton", "scroll", "popupMenu", "currentWorkflowLabel", "refreshButton", "savedGraphList", "globalProgressBar", "progressItemsList", "clearCompletedButton", "cancelRunningButton", "maxThreadsBox")]
 layout_mode = 2
 size_flags_vertical = 3
 right_disconnects = true
@@ -425,11 +426,12 @@ popup = NodePath("PopupPanel")
 popupSearchBox = NodePath("PopupPanel/VBoxContainer/SearchBox")
 availableNodes = NodePath("PopupPanel/VBoxContainer/ScrollContainer/ItemsList")
 nodeButtonScene = ExtResource("10_oq113")
+errorDialog = NodePath("ErrorDialog")
 saveDialog = NodePath("../SaveWorkflowPopup")
 testFileButton = NodePath("../VBoxContainer/TabContainer/Running/HBoxContainer3/TestButton")
 processAllButton = NodePath("../VBoxContainer/TabContainer/Running/HBoxContainer3/ProcessAllButton")
 scroll = NodePath("PopupPanel/VBoxContainer/ScrollContainer")
-popupMenu = NodePath("../../../MenuBar/Workflow")
+popupMenu = NodePath("../../../HidePlace/Workflow")
 currentWorkflowLabel = NodePath("../VBoxContainer/TabContainer/Saved/HBoxContainer/Label")
 refreshButton = NodePath("../VBoxContainer/TabContainer/Saved/HBoxContainer/RefreshButton")
 savedGraphList = NodePath("../VBoxContainer/TabContainer/Saved/ScrollContainer/VBoxContainer")
@@ -464,6 +466,12 @@ vertical_scroll_mode = 2
 [node name="ItemsList" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="ErrorDialog" type="AcceptDialog" parent="VBoxContainer/TabContainer/Workflow/GraphEdit"]
+title = "Error!"
+initial_position = 2
+size = Vector2i(423, 100)
+dialog_text = "A node is missing an input, please connect this node."
 
 [node name="InputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" node_paths=PackedStringArray("graph") instance=ExtResource("8_wesyw")]
 layout_mode = 0

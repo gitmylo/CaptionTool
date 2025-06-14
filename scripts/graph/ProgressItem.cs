@@ -9,6 +9,7 @@ public partial class ProgressItem: Control
     [Export] private ColorIndicator indicator;
     [Export] private Label nameLabel;
     [Export] private Button removeButton;
+    [Export] private Button printErrorButton;
     
     public ExecutionTracker tracker;
 
@@ -22,6 +23,14 @@ public partial class ProgressItem: Control
                 Cancel();
             
             QueueFree();
+        };
+        printErrorButton.Pressed += () =>
+        {
+            if (tracker.error != null)
+            {
+                GD.Print(tracker.error.ToString());
+                throw tracker.error;
+            }
         };
     }
 
@@ -65,6 +74,7 @@ public partial class ProgressItem: Control
                 bar.Value = 100;
                 bar.Indeterminate = false;
                 indicator.MarkNotCreated();
+                printErrorButton.Visible = true;
                 break;
         }
     }
