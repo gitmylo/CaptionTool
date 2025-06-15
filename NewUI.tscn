@@ -127,6 +127,7 @@ grow_vertical = 2
 [node name="HidePlace" type="Node" parent="VBoxContainer"]
 
 [node name="Workflow" type="PopupMenu" parent="VBoxContainer/HidePlace" node_paths=PackedStringArray("showPlace", "hidePlace", "tabs")]
+size = Vector2i(129, 100)
 item_count = 3
 item_0/text = "Save"
 item_0/id = 0
@@ -156,10 +157,9 @@ item_2/id = 2
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 1
+current_tab = 0
 
 [node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 400
@@ -312,6 +312,7 @@ color = Color(1, 0, 0, 1)
 script = ExtResource("2_n2i5l")
 
 [node name="Workflow" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 split_offset = 400
 metadata/_tab_index = 1
@@ -382,7 +383,6 @@ text = "Clear completed"
 [node name="CancelRunningButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-disabled = true
 text = "Cancel all running"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]

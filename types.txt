@@ -4,3 +4,4 @@
 3: Boolean - gray
 4: RegexResult - blue
 5: Any - white
+6: ChatMessage - purple

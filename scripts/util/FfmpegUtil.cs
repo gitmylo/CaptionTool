@@ -176,7 +176,7 @@ public static class FfmpegUtil
         var culture = CultureInfo.InvariantCulture;
         
         string command = "ffmpeg";
-        string[] parameters = ["-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "png", "-f", "image2pipe", "-"];
+        string[] parameters = ["-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "mjpeg", "-f", "image2pipe", "-"];
 
         var process = OS.ExecuteWithPipe(command, parameters, true);
         var io = process["stdio"].As<FileAccess>();

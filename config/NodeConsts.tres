@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NodeConsts" load_steps=42 format=3 uid="uid://b16ghggybel45"]
+[gd_resource type="Resource" script_class="NodeConsts" load_steps=49 format=3 uid="uid://b16ghggybel45"]
 
 [ext_resource type="Script" uid="uid://defbj104bmdy5" path="res://scripts/graph/Nodes/NodeDef.cs" id="1_1yax3"]
 [ext_resource type="Resource" uid="uid://d17cd8arm2mk0" path="res://config/InputNodeDef.tres" id="1_dn27j"]
@@ -20,6 +20,9 @@
 [ext_resource type="PackedScene" uid="uid://buksqd1lo8ve4" path="res://scripts/graph/Nodes/impl/stringfunc/stringfunc2.tscn" id="15_g3k6o"]
 [ext_resource type="PackedScene" uid="uid://x5hkc4ru5t7r" path="res://scripts/graph/Nodes/impl/file/readfile.tscn" id="16_g3k6o"]
 [ext_resource type="PackedScene" uid="uid://bx6p24g5p6j70" path="res://scripts/graph/Nodes/impl/ffmpeg/ffmpeg_frameextract.tscn" id="17_4fwhx"]
+[ext_resource type="PackedScene" uid="uid://dep5tqlugsyjq" path="res://scripts/graph/Nodes/impl/llm/llm_create_message.tscn" id="18_xf4yq"]
+[ext_resource type="PackedScene" uid="uid://bdan158yja0ki" path="res://scripts/graph/Nodes/impl/llm/llm_attach_image.tscn" id="19_x31rq"]
+[ext_resource type="PackedScene" uid="uid://bdyj0s4h0yuvn" path="res://scripts/graph/Nodes/impl/llm/llm_request.tscn" id="20_26ri5"]
 
 [sub_resource type="Resource" id="Resource_g3gri"]
 script = ExtResource("1_1yax3")
@@ -141,6 +144,30 @@ identifier = "ffmpeg.frameextract"
 node = ExtResource("17_4fwhx")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
+[sub_resource type="Resource" id="Resource_26ri5"]
+script = ExtResource("1_1yax3")
+name = "Create chat message"
+description = "Create a chat message for the LLM to use, merge with appendarray for multi-message chats."
+identifier = "llm.createmesssage"
+node = ExtResource("18_xf4yq")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_ycxsg"]
+script = ExtResource("1_1yax3")
+name = "Attach image"
+description = "Attach an image to a chat message."
+identifier = "llm.attachimage"
+node = ExtResource("19_x31rq")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_mccwv"]
+script = ExtResource("1_1yax3")
+name = "Llm request"
+description = "Sends the request to run an LLM, uses the api key and endpoint from the settings."
+identifier = "llm.request"
+node = ExtResource("20_26ri5")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
 [sub_resource type="Resource" id="Resource_m4mrw"]
 script = ExtResource("7_orlgk")
 id = 0
@@ -183,10 +210,17 @@ name = "Any"
 color = Color(1, 1, 1, 1)
 metadata/_custom_type_script = "uid://577oe5hg6jsn"
 
+[sub_resource type="Resource" id="Resource_xf4yq"]
+script = ExtResource("7_orlgk")
+id = 6
+name = "ChatMessage"
+color = Color(0.683333, 0, 1, 1)
+metadata/_custom_type_script = "uid://577oe5hg6jsn"
+
 [resource]
 script = ExtResource("6_e4mmj")
-types = Array[ExtResource("7_orlgk")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv"), SubResource("Resource_vlxtm")])
-nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp"), SubResource("Resource_cql34"), SubResource("Resource_g3k6o"), SubResource("Resource_4fwhx"), SubResource("Resource_x31rq")])
+types = Array[ExtResource("7_orlgk")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv"), SubResource("Resource_vlxtm"), SubResource("Resource_xf4yq")])
+nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp"), SubResource("Resource_cql34"), SubResource("Resource_g3k6o"), SubResource("Resource_4fwhx"), SubResource("Resource_x31rq"), SubResource("Resource_26ri5"), SubResource("Resource_ycxsg"), SubResource("Resource_mccwv")])
 inputNodeDef = ExtResource("1_dn27j")
 outputNodeDef = ExtResource("13_isn6l")
 AnyType = 5

@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://bdan158yja0ki"]
+
+[ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_8dhb4"]
+[ext_resource type="Script" uid="uid://cwndilapxkmdw" path="res://scripts/graph/Nodes/impl/scripts/llm/LlmAddImage.cs" id="2_yag4n"]
+
+[sub_resource type="Resource" id="Resource_ao6ic"]
+script = ExtResource("2_yag4n")
+metadata/_custom_type_script = "uid://cwndilapxkmdw"
+
+[node name="LlmAttachImage" type="GraphNode"]
+custom_minimum_size = Vector2(0, 90)
+offset_right = 222.0
+offset_bottom = 90.0
+mouse_filter = 1
+resizable = true
+title = "Attach image"
+slot/0/left_enabled = true
+slot/0/left_type = 6
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 6
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+script = ExtResource("1_8dhb4")
+core = SubResource("Resource_ao6ic")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Message"
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Message"
+horizontal_alignment = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Image"
