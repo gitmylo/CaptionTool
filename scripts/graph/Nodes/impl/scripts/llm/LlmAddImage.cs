@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
 
@@ -15,7 +16,7 @@ public partial class LlmAddImage : ExecutionCore
         foreach (var item in items)
         {
             var clone = item.Item1.Clone();
-            clone.image = item.Item2;
+            clone.images = clone.images.Append(item.Item2).ToArray();
             output.Add(clone);
         }
         

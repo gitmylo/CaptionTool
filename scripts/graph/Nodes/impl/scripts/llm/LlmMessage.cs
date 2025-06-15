@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using Array = Godot.Collections.Array;
@@ -9,7 +10,7 @@ public partial class LlmMessage : Resource
 {
     public string role;
     public string message;
-    public string image;
+    public string[] images;
 
     public Dictionary ToGDDict()
     {
@@ -24,14 +25,17 @@ public partial class LlmMessage : Resource
             content.Add(messageDict);
         }
 
-        if (image != null)
+        if (images != null)
         {
-            var imageDict = new Dictionary();
-            imageDict["type"] = "image_url";
-            var image = new Dictionary();
-            image["url"] = "data:image/jpeg;base64," + this.image;
-            imageDict["image_url"] = image;
-            content.Add(imageDict);
+            foreach (var img in images)
+            {
+                var imageDict = new Dictionary();
+                imageDict["type"] = "image_url";
+                var image = new Dictionary();
+                image["url"] = "data:image/jpeg;base64," + img;
+                imageDict["image_url"] = image;
+                content.Add(imageDict);
+            }
         }
         
         dict["content"] = content;
@@ -44,7 +48,7 @@ public partial class LlmMessage : Resource
         {
             role = role,
             message = message,
-            image = image
+            images = images.ToArray() // clones
         };
     }
 }
