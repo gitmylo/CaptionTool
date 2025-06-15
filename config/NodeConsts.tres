@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NodeConsts" load_steps=49 format=3 uid="uid://b16ghggybel45"]
+[gd_resource type="Resource" script_class="NodeConsts" load_steps=51 format=3 uid="uid://b16ghggybel45"]
 
 [ext_resource type="Script" uid="uid://defbj104bmdy5" path="res://scripts/graph/Nodes/NodeDef.cs" id="1_1yax3"]
 [ext_resource type="Resource" uid="uid://d17cd8arm2mk0" path="res://config/InputNodeDef.tres" id="1_dn27j"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://dep5tqlugsyjq" path="res://scripts/graph/Nodes/impl/llm/llm_create_message.tscn" id="18_xf4yq"]
 [ext_resource type="PackedScene" uid="uid://bdan158yja0ki" path="res://scripts/graph/Nodes/impl/llm/llm_attach_image.tscn" id="19_x31rq"]
 [ext_resource type="PackedScene" uid="uid://bdyj0s4h0yuvn" path="res://scripts/graph/Nodes/impl/llm/llm_request.tscn" id="20_26ri5"]
+[ext_resource type="PackedScene" uid="uid://b2ah7fpg0og6t" path="res://scripts/graph/Nodes/impl/list/list_append.tscn" id="21_ycxsg"]
 
 [sub_resource type="Resource" id="Resource_g3gri"]
 script = ExtResource("1_1yax3")
@@ -168,6 +169,14 @@ identifier = "llm.request"
 node = ExtResource("20_26ri5")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
+[sub_resource type="Resource" id="Resource_65g4l"]
+script = ExtResource("1_1yax3")
+name = "Combine any"
+description = "Combine 2 items or lists into a combined list, useful for things like llm chat messages."
+identifier = "list.append"
+node = ExtResource("21_ycxsg")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
 [sub_resource type="Resource" id="Resource_m4mrw"]
 script = ExtResource("7_orlgk")
 id = 0
@@ -220,7 +229,7 @@ metadata/_custom_type_script = "uid://577oe5hg6jsn"
 [resource]
 script = ExtResource("6_e4mmj")
 types = Array[ExtResource("7_orlgk")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv"), SubResource("Resource_vlxtm"), SubResource("Resource_xf4yq")])
-nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp"), SubResource("Resource_cql34"), SubResource("Resource_g3k6o"), SubResource("Resource_4fwhx"), SubResource("Resource_x31rq"), SubResource("Resource_26ri5"), SubResource("Resource_ycxsg"), SubResource("Resource_mccwv")])
+nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp"), SubResource("Resource_cql34"), SubResource("Resource_g3k6o"), SubResource("Resource_4fwhx"), SubResource("Resource_x31rq"), SubResource("Resource_26ri5"), SubResource("Resource_ycxsg"), SubResource("Resource_mccwv"), SubResource("Resource_65g4l")])
 inputNodeDef = ExtResource("1_dn27j")
 outputNodeDef = ExtResource("13_isn6l")
 AnyType = 5
