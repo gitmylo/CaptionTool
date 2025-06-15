@@ -27,6 +27,15 @@ Captiontool is a tool for captioning images and videos.
 
 ## Workflows
 Workflows allow for automating captioning through the use of graph nodes. Just add nodes and connect the inputs.
+**Note**: Workflows are currently very early and were just made to do the bare minimum.
+Some features that may come to workflows in the future:
+* [ ] Widgets for non-connected string, number or bool inputs
+* [ ] Optional inputs
+* [ ] Dependent types (e.g. make output a string if the input is connected to a string)
+
+**Example**: Reading a .txt file with the same name and using it as the caption
+![image](https://github.com/user-attachments/assets/5dabd199-54c7-470d-9b6b-1761c69045c0)
+
 
 ## Requirements
 ### FFmpeg
