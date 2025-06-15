@@ -156,9 +156,10 @@ item_2/id = 2
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 1
 
 [node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 400
@@ -311,7 +312,6 @@ color = Color(1, 0, 0, 1)
 script = ExtResource("2_n2i5l")
 
 [node name="Workflow" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 split_offset = 400
 metadata/_tab_index = 1

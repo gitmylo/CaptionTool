@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
 using Godot;
 using Godot.Collections;
 using Array = Godot.Collections.Array;
+using FileAccess = Godot.FileAccess;
 
 namespace CaptionTool.scripts.util;
 
@@ -165,7 +170,34 @@ public static class FfmpegUtil
         return videoOut;
     }
     
-    // TODO: Frame extract, `ffmpeg -i troll.jpg -f image2pipe - > troll.png`
+    // Frame extract, `ffmpeg -i troll.jpg -f image2pipe - > troll.png`
+    public static string GetVideoFrame(string inFile, double position)
+    {
+        var culture = CultureInfo.InvariantCulture;
+        
+        string command = "ffmpeg";
+        string[] parameters = ["-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "png", "-f", "image2pipe", "-"];
+
+        var process = OS.ExecuteWithPipe(command, parameters, true);
+        var io = process["stdio"].As<FileAccess>();
+        
+        var stream = new MemoryStream();
+        
+        while (!io.EofReached())
+        {
+            var length = (long)2048;
+            var buffer = io.GetBuffer(length);
+            
+            if (buffer.All(x => x == 0)) break;
+            
+            stream.Write(buffer, 0, buffer.Length);
+        }
+        
+        var frameData = stream.ToArray();
+        var base64 = Convert.ToBase64String(frameData);
+        return base64;
+    }
+    
     public static VideoInfo GetVideoInfo(string file)
     {
         string command = "ffprobe";
@@ -208,5 +240,10 @@ public static class FfmpegUtil
 
             return new VideoInfo(firstStream["width"].AsInt32(), firstStream["height"].AsInt32(), duration, frameRate, (int)(duration * frameRate), format["filename"], size);
         }
+    }
+
+    public class Container<T>
+    {
+        public T value;
     }
 }
