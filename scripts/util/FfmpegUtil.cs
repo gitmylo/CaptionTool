@@ -180,18 +180,21 @@ public static class FfmpegUtil
         
         var process = OS.ExecuteWithPipe(command, parameters, true);
         var io = process["stdio"].As<FileAccess>();
+        var pid = process["pid"].As<int>();
         
         var stream = new MemoryStream();
         
         while (true)
         {
-            var length = (long)2048;
+            var length = (long)1024*2;
             var buffer = io.GetBuffer(length);
             
             // if (buffer.All(x => x == 0)) break;
-            if (buffer.Length == 0) break;
             stream.Write(buffer, 0, buffer.Length);
+            if (buffer.Length != length) break;
         }
+
+        if (OS.IsProcessRunning(pid)) OS.Kill(pid); // Ensure no more process
         
         var frameData = stream.ToArray();
         if (frameData.Length == 0)
