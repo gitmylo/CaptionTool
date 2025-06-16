@@ -289,7 +289,7 @@ public partial class GraphManager: GraphEdit
     {
         var node = nodesByName[originNode];
         var inputCount = node.GetInputPortCount();
-        var thisNode = new ExecutionNode {node = node.core, uiValues = node.GetControlValues()};
+        var thisNode = new ExecutionNode {node = node.core, uiValues = node.GetControlValues(), name = node.Name};
         for (int i = 0; i < inputCount; i++)
         {
             // If the connection doesn't exist, show an error indicating that a connection is missing

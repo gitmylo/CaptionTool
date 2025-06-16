@@ -43,10 +43,10 @@ public partial class SamplePoints : ExecutionCore
     public double[] SampleUniform(double min, double max, int count, bool spaceBetween)
     {
         if (count == 1) return new double[] { min + (max-min)/2 };
-        var effectiveCount = spaceBetween ? count + 2 : count;
-        var output = new double[effectiveCount];
-        var step = count / (max-min);
-        for (int i = 0; i < effectiveCount; i++)
+        var effectiveCount = spaceBetween ? count + 1 : count;
+        var output = new double[count];
+        var step = (max-min) / effectiveCount;
+        for (int i = 0; i < count; i++)
         {
             output[i] = min + step * i + (spaceBetween ? step : 0);
         }

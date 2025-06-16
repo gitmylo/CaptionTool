@@ -13,6 +13,7 @@ public partial class FfmpegFrameExtract : ExecutionCore
         var inner = Inner();
         foreach (var input in inputs[0].GrowZip<string, double>(inputs[1]))
         {
+            GD.Print(input);
             inner.Add(FfmpegUtil.GetVideoFrame(input.Item1, input.Item2));
         }
         return Results(inner);

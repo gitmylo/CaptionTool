@@ -177,23 +177,27 @@ public static class FfmpegUtil
         
         string command = "ffmpeg";
         string[] parameters = ["-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "mjpeg", "-f", "image2pipe", "-"];
-
+        
         var process = OS.ExecuteWithPipe(command, parameters, true);
         var io = process["stdio"].As<FileAccess>();
         
         var stream = new MemoryStream();
         
-        while (!io.EofReached())
+        while (true)
         {
             var length = (long)2048;
             var buffer = io.GetBuffer(length);
             
-            if (buffer.All(x => x == 0)) break;
-            
+            // if (buffer.All(x => x == 0)) break;
+            if (buffer.Length == 0) break;
             stream.Write(buffer, 0, buffer.Length);
         }
         
         var frameData = stream.ToArray();
+        if (frameData.Length == 0)
+        {
+            throw new Exception("Reading failed, read 0 bytes");
+        }
         var base64 = Convert.ToBase64String(frameData);
         return base64;
     }

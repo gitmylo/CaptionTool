@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Godot;
 using Godot.Collections;
 using Array = Godot.Collections.Array;
 
@@ -83,6 +84,7 @@ public class ExecutionNode
     public NodeExecutionContext context;
     public List<(ExecutionNode, int, int)> inputConnections = new (); // Connection (sourcenode, sourceidx, targetidx). This is targetnode
     public ExecutionCore node;
+    public string name;
 
     public Array<Array> outputs;
     public Array uiValues;
@@ -106,6 +108,10 @@ public class ExecutionNode
             var outputs = connection.Item1.outputs[connection.Item2];
             inputs[connection.Item3] = outputs;
         }
+
+#if DEBUG
+        GD.Print($"Executing {name}");
+#endif
 
         outputs = await node.Execute(inputs, context, uiValues);
         hasExecuted = true;
