@@ -10,13 +10,14 @@ public partial class LlmAddImage : ExecutionCore
 {
     public override async Task<Array<Array>> Execute(Array<Array> inputs, NodeExecutionContext context, Array values)
     {
-        var items = inputs[0].GrowZip<LlmMessage, string>(inputs[1]);
         var output = Inner();
 
-        foreach (var item in items)
+        foreach (var message in inputs[0].FromUGdArray<LlmMessage>())
         {
-            var clone = item.Item1.Clone();
-            clone.images = clone.images.Append(item.Item2).ToArray();
+            var clone = message.Clone();
+            var newImages = clone.images.ToList();
+            newImages.AddRange(inputs[1].FromUGdArray<string>());
+            clone.images = newImages.ToArray();
             output.Add(clone);
         }
         
