@@ -42,6 +42,7 @@ public partial class SamplePoints : ExecutionCore
 
     public double[] SampleUniform(double min, double max, int count, bool spaceBetween)
     {
+        if (count == 1) return new double[] { min + (max-min)/2 };
         var effectiveCount = spaceBetween ? count + 2 : count;
         var output = new double[effectiveCount];
         var step = count / (max-min);
