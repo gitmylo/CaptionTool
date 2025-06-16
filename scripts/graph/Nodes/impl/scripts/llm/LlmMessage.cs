@@ -10,7 +10,7 @@ public partial class LlmMessage : Resource
 {
     public string role;
     public string message;
-    public string[] images;
+    public string[] images = new string[0];
 
     public Dictionary ToGDDict()
     {

@@ -7,7 +7,7 @@
 script = ExtResource("2_b75qu")
 metadata/_custom_type_script = "uid://dmagjvs28wf20"
 
-[node name="Compare" type="GraphNode" node_paths=PackedStringArray("controls")]
+[node name="StringFunc2v" type="GraphNode" node_paths=PackedStringArray("controls")]
 custom_minimum_size = Vector2(0, 90)
 offset_right = 222.0
 offset_bottom = 90.0

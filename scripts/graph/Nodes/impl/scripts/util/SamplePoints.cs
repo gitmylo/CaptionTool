@@ -12,7 +12,7 @@ public partial class SamplePoints : ExecutionCore
     public override async Task<Array<Array>> Execute(Array<Array> inputs, NodeExecutionContext context, Array values)
     {
         var minMaxes = inputs[0].GrowZip<double, double>(inputs[1]);
-        var minMaxVals = minMaxes.ToUGdArray().GrowZip<(double, double), double>(inputs[2]);
+        var minMaxVals = minMaxes.GrowZip(inputs[2].FromUGdArray<double>());
         var method = values[0].AsString();
         var outputSamples = Inner();
         foreach (var (minmax, count) in minMaxVals)
