@@ -53,6 +53,7 @@ On windows,
 ## Known issues
 * Workflow error messages aren't very descriptive
 * Workflow saving shortcut doesn't activate when typing in a node's input widget
+* Zooming in/out on workflow doesn't properly translate adding new nodes, nodes may appear in the wrong place
 * Aspect ratios of gifs don't properly load, leading to gifs using the aspect ratio of the previously loaded video
 
 ## Credits

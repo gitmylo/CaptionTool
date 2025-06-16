@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NodeConsts" load_steps=51 format=3 uid="uid://b16ghggybel45"]
+[gd_resource type="Resource" script_class="NodeConsts" load_steps=56 format=3 uid="uid://b16ghggybel45"]
 
 [ext_resource type="Script" uid="uid://defbj104bmdy5" path="res://scripts/graph/Nodes/NodeDef.cs" id="1_1yax3"]
 [ext_resource type="Resource" uid="uid://d17cd8arm2mk0" path="res://config/InputNodeDef.tres" id="1_dn27j"]
@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://bdan158yja0ki" path="res://scripts/graph/Nodes/impl/llm/llm_attach_image.tscn" id="19_x31rq"]
 [ext_resource type="PackedScene" uid="uid://bdyj0s4h0yuvn" path="res://scripts/graph/Nodes/impl/llm/llm_request.tscn" id="20_26ri5"]
 [ext_resource type="PackedScene" uid="uid://b2ah7fpg0og6t" path="res://scripts/graph/Nodes/impl/list/list_append.tscn" id="21_ycxsg"]
+[ext_resource type="PackedScene" uid="uid://bvk5tsuotw767" path="res://scripts/graph/Nodes/impl/util/sample.tscn" id="22_mccwv"]
+[ext_resource type="PackedScene" uid="uid://u0iwx7ifgfk7" path="res://scripts/graph/Nodes/impl/list/list_index.tscn" id="23_65g4l"]
 
 [sub_resource type="Resource" id="Resource_g3gri"]
 script = ExtResource("1_1yax3")
@@ -177,6 +179,22 @@ identifier = "list.append"
 node = ExtResource("21_ycxsg")
 metadata/_custom_type_script = "uid://defbj104bmdy5"
 
+[sub_resource type="Resource" id="Resource_ne75t"]
+script = ExtResource("1_1yax3")
+name = "Index list"
+description = "Get a single value from a list."
+identifier = "list.index"
+node = ExtResource("23_65g4l")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
+[sub_resource type="Resource" id="Resource_nda8y"]
+script = ExtResource("1_1yax3")
+name = "Sample points"
+description = "Sample a couple points, useful for getting the first and last frame of a video, or splitting a video into sections."
+identifier = "util.samplepoints"
+node = ExtResource("22_mccwv")
+metadata/_custom_type_script = "uid://defbj104bmdy5"
+
 [sub_resource type="Resource" id="Resource_m4mrw"]
 script = ExtResource("7_orlgk")
 id = 0
@@ -226,10 +244,17 @@ name = "ChatMessage"
 color = Color(0.683333, 0, 1, 1)
 metadata/_custom_type_script = "uid://577oe5hg6jsn"
 
+[sub_resource type="Resource" id="Resource_e5a6e"]
+script = ExtResource("7_orlgk")
+id = 7
+name = "Chat"
+color = Color(0.464667, 0, 0.82, 1)
+metadata/_custom_type_script = "uid://577oe5hg6jsn"
+
 [resource]
 script = ExtResource("6_e4mmj")
-types = Array[ExtResource("7_orlgk")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv"), SubResource("Resource_vlxtm"), SubResource("Resource_xf4yq")])
-nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp"), SubResource("Resource_cql34"), SubResource("Resource_g3k6o"), SubResource("Resource_4fwhx"), SubResource("Resource_x31rq"), SubResource("Resource_26ri5"), SubResource("Resource_ycxsg"), SubResource("Resource_mccwv"), SubResource("Resource_65g4l")])
+types = Array[ExtResource("7_orlgk")]([SubResource("Resource_m4mrw"), SubResource("Resource_kqcfq"), SubResource("Resource_ch024"), SubResource("Resource_aof5c"), SubResource("Resource_l2whv"), SubResource("Resource_vlxtm"), SubResource("Resource_xf4yq"), SubResource("Resource_e5a6e")])
+nodes = Array[ExtResource("1_1yax3")]([SubResource("Resource_g3gri"), SubResource("Resource_ehtkw"), SubResource("Resource_qrmep"), SubResource("Resource_6qlte"), SubResource("Resource_dn27j"), SubResource("Resource_r56ay"), SubResource("Resource_e4mmj"), SubResource("Resource_orlgk"), SubResource("Resource_isn6l"), SubResource("Resource_5rld5"), SubResource("Resource_or4qp"), SubResource("Resource_cql34"), SubResource("Resource_g3k6o"), SubResource("Resource_4fwhx"), SubResource("Resource_x31rq"), SubResource("Resource_26ri5"), SubResource("Resource_ycxsg"), SubResource("Resource_mccwv"), SubResource("Resource_65g4l"), SubResource("Resource_ne75t"), SubResource("Resource_nda8y")])
 inputNodeDef = ExtResource("1_dn27j")
 outputNodeDef = ExtResource("13_isn6l")
 AnyType = 5
