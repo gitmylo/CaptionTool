@@ -32,7 +32,7 @@ public partial class LlmMessage : Resource
                 var imageDict = new Dictionary();
                 imageDict["type"] = "image_url";
                 var image = new Dictionary();
-                image["url"] = "data:image/jpeg;base64," + img;
+                image["url"] = "data:image/png;base64," + img;
                 imageDict["image_url"] = image;
                 content.Add(imageDict);
             }

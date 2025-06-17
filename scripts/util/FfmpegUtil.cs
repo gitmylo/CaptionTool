@@ -176,7 +176,7 @@ public static class FfmpegUtil
         var culture = CultureInfo.InvariantCulture;
         
         string command = "ffmpeg";
-        string[] parameters = ["-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "mjpeg", "-f", "image2pipe", "-"];
+        string[] parameters = ["-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "png", "-f", "image2pipe", "-"];
         
         var process = OS.ExecuteWithPipe(command, parameters, true);
         var io = process["stdio"].As<FileAccess>();
@@ -186,12 +186,13 @@ public static class FfmpegUtil
         
         while (true)
         {
-            var length = (long)1024*2;
+            var length = (long)1024*8;
+            GD.Print("Reading");
             var buffer = io.GetBuffer(length);
             
             // if (buffer.All(x => x == 0)) break;
             stream.Write(buffer, 0, buffer.Length);
-            if (buffer.Length != length) break;
+            if (buffer.Length == 0) break;
         }
 
         if (OS.IsProcessRunning(pid)) OS.Kill(pid); // Ensure no more process
