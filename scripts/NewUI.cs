@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using CaptionTool.scripts;
 using CaptionTool.scripts.util;
-using Godot.Collections;
 using Newtonsoft.Json;
 
 public partial class NewUI : Node
@@ -85,6 +84,9 @@ public partial class NewUI : Node
         
         WorkspaceDialog.Show(); // Show at the start
 
+        inFiles.SetColumnExpand(0, true);
+        inFiles.SetColumnExpand(1, false);
+        inFiles.SetColumnCustomMinimumWidth(1, 50);
         inFilesRoot = inFiles.CreateItem();
         inFiles.ItemActivated += () =>
         {
@@ -360,6 +362,7 @@ public partial class NewUI : Node
             if (blacklist.Contains(file.GetExtension())) continue;
             var child = item.CreateChild();
             child.SetText(0, file);
+            child.SetText(1, CaptionsForVideo(basePath.PathJoin(file)).Length.ToString()); // TODO: Caption count, update automatically when saving
             child.SetTooltipText(0, basePath.PathJoin(file));
         }
     }
@@ -462,14 +465,35 @@ public partial class NewUI : Node
         // }
     }
 
+    public TreeItem FindTreeItemByPathRecursive(string path, TreeItem item = null)
+    {
+        if (item == null)
+        {
+            item = inFilesRoot;
+        }
+
+        if (item.GetTooltipText(0) == path)
+        {
+            return item;
+        }
+
+        return item.GetChildren().Select(x => FindTreeItemByPathRecursive(path, x)).FirstOrDefault(x => x != null);
+    }
+
     public void SaveCaptionFor(string target, SaveableCaption[] captions)
     {
         string targetPath = CaptionFileFor(target);
         string value = JsonConvert.SerializeObject(captions);
         DirAccess.MakeDirRecursiveAbsolute(targetPath.GetBaseDir());
-        using (var f  = FileAccess.Open(targetPath, FileAccess.ModeFlags.Write))
+        using (var f = FileAccess.Open(targetPath, FileAccess.ModeFlags.Write))
         {
             f.StoreString(value);
+        }
+        
+        var item = FindTreeItemByPathRecursive(target);
+        if (item != null)
+        {
+            item.SetText(1, captions.Length.ToString());
         }
     }
 
