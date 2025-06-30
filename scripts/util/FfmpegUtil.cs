@@ -152,7 +152,7 @@ public static class FfmpegUtil
     public static string CutVideoAndCreateCaption(string inFile, string outDir, string caption, double startSeconds, double endSeconds, Config config)
     {
         var (videoOut, captionOut) = GetOutPaths(inFile, outDir);
-        if (caption.Length != 0 || config.saveTxt)
+        if (caption.Length != 0 || (config.saveTxt == 1 || config.saveTxt == 3))
         {
             using (var file = FileAccess.Open(captionOut, FileAccess.ModeFlags.Write))
             {

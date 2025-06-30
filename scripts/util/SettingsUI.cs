@@ -6,7 +6,7 @@ namespace CaptionTool.scripts.util;
 public partial class SettingsUI : Control
 {
     [Export] private SpinBox fpsBox;
-    [Export] private CheckBox saveTxtBox;
+    [Export] public OptionButton saveTxtBox;
     [Export] private LineEdit inPath, procPath, outPath;
 
     public event Action SettingChanged;
@@ -14,7 +14,7 @@ public partial class SettingsUI : Control
     public override void _Ready()
     {
         fpsBox.ValueChanged += _ => InvokeUpdated();
-        saveTxtBox.Toggled += _ => InvokeUpdated();
+        saveTxtBox.ItemSelected += _ => InvokeUpdated();
 
         inPath.TextChanged += _ => InvokeUpdated();
         procPath.TextChanged += _ => InvokeUpdated();
@@ -29,7 +29,7 @@ public partial class SettingsUI : Control
     public void SettingsFromConfig(Config c)
     {
         fpsBox.Value = c.fps;
-        saveTxtBox.ButtonPressed = c.saveTxt;
+        saveTxtBox.Selected = c.saveTxt;
         
         inPath.Text = c.inDir;
         procPath.Text = c.procDir;
@@ -39,7 +39,7 @@ public partial class SettingsUI : Control
     public void ConfigFromSettings(Config c)
     {
         c.fps = (int) fpsBox.Value;
-        c.saveTxt = saveTxtBox.ButtonPressed;
+        c.saveTxt = saveTxtBox.Selected;
 
         c.inDir = inPath.Text;
         c.procDir = procPath.Text;

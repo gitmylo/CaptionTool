@@ -157,9 +157,10 @@ item_2/id = 2
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 2
 
 [node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 400
@@ -496,7 +497,6 @@ graph = NodePath("..")
 core = SubResource("Resource_wdqke")
 
 [node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "inPath", "procPath", "outPath")]
-visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wmd31")
 script = ExtResource("2_d134i")
@@ -550,15 +550,21 @@ suffix = "fps"
 
 [node name="SaveTxtLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
-text = "Save txt file without caption:"
+text = "Save without caption:"
 horizontal_alignment = 2
 
-[node name="Savetxt" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="Savetxt" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
-tooltip_text = "Create a .txt file, even if no caption is written"
-button_pressed = true
-text = "Save"
+selected = 0
+item_count = 4
+popup/item_0/text = "Save all videos, always save caption .txt"
+popup/item_0/id = 0
+popup/item_1/text = "Save all videos, skip .txt files for empty captions"
+popup/item_1/id = 1
+popup/item_2/text = "Save only captioned videos, always save caption .txt"
+popup/item_2/id = 2
+popup/item_3/text = "Save only captioned videos, skip .txt files for empty captions"
+popup/item_3/id = 3
 
 [node name="FilePathsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2

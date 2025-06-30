@@ -66,7 +66,7 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
 
     public void WriteCaption(string captionFile)
     {
-        if (caption.caption == "" && !config.saveTxt) return;
+        if (caption.caption == "" && (config.saveTxt == 1 || config.saveTxt == 3)) return;
         
         using (var f = FileAccess.Open(captionFile, FileAccess.ModeFlags.Write))
         {

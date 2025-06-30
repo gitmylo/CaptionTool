@@ -44,7 +44,7 @@ public partial class Setup : Node
             child.QueueFree();
         }
         
-        scene.InitPaths(source, dest, new Config {fps = (int)fpsSpinBox.Value, saveTxt = saveTxt.ButtonPressed});
+        scene.InitPaths(source, dest, new Config {fps = (int)fpsSpinBox.Value, saveTxt = saveTxt.ButtonPressed ? 0 : 1});
         
         AddChild(scene);
     }
