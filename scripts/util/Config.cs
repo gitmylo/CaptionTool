@@ -31,7 +31,7 @@ public class SaveTxtBoolToNewConverter : JsonConverter
         }
         else
         {
-            return (int)reader.Value;
+            return (int)(long)reader.Value;
         }
     }
 
