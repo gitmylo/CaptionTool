@@ -625,7 +625,7 @@ public partial class NewUI : Node
         {
             string path = currentPath.PathJoin(file);
             var captions = CaptionsForVideo(path);
-            if (captions.Length == 0 && SettingsTab.saveTxtBox.Selected >= 2) // On 2 and 3, don't save empty captions at all
+            if (captions.Length == 0 && SettingsTab.saveTxtBox.Selected <= 1) // On 2 and 3, don't save empty captions at all
             {
                 current.Add(new ExportableEntry(path, 0, config, new SaveableCaption {bypassduration = true}));
             }
