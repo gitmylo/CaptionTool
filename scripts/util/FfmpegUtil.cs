@@ -173,6 +173,9 @@ public static class FfmpegUtil
     // Frame extract, `ffmpeg -i troll.jpg -f image2pipe - > troll.png`
     public static string GetVideoFrame(string inFile, double position)
     {
+        if (NewUI.ImageExtensions.Contains(inFile.GetExtension()))
+            return GetImageAsFrame(inFile);
+        
         var culture = CultureInfo.InvariantCulture;
         
         string command = "ffmpeg";
@@ -204,6 +207,11 @@ public static class FfmpegUtil
         }
         var base64 = Convert.ToBase64String(frameData);
         return base64;
+    }
+
+    public static string GetImageAsFrame(string inFile)
+    {
+        return Convert.ToBase64String(File.ReadAllBytes(inFile));
     }
     
     public static VideoInfo GetVideoInfo(string file)
