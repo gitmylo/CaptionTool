@@ -623,6 +623,7 @@ public partial class NewUI : Node
         }
         foreach (var file in dir.GetFiles())
         {
+            if (blacklist.Contains(file.GetExtension())) continue;
             string path = currentPath.PathJoin(file);
             var captions = CaptionsForVideo(path);
             if (captions.Length == 0 && SettingsTab.saveTxtBox.Selected <= 1) // On 2 and 3, don't save empty captions at all
