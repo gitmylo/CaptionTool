@@ -197,7 +197,6 @@ metadata/_custom_type_script = "uid://defbj104bmdy5"
 
 [sub_resource type="Resource" id="Resource_m4mrw"]
 script = ExtResource("7_orlgk")
-id = 0
 name = "String"
 color = Color(1, 0, 0, 1)
 metadata/_custom_type_script = "uid://577oe5hg6jsn"
@@ -234,7 +233,6 @@ metadata/_custom_type_script = "uid://577oe5hg6jsn"
 script = ExtResource("7_orlgk")
 id = 5
 name = "Any"
-color = Color(1, 1, 1, 1)
 metadata/_custom_type_script = "uid://577oe5hg6jsn"
 
 [sub_resource type="Resource" id="Resource_xf4yq"]

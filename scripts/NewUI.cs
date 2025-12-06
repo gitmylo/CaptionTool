@@ -626,14 +626,18 @@ public partial class NewUI : Node
             if (blacklist.Contains(file.GetExtension())) continue;
             string path = currentPath.PathJoin(file);
             var captions = CaptionsForVideo(path);
+            int counter = 0;
             if (captions.Length == 0 && SettingsTab.saveTxtBox.Selected <= 1) // On 2 and 3, don't save empty captions at all
             {
-                current.Add(new ExportableEntry(path, 0, config, new SaveableCaption {bypassduration = true}));
+                // current.Add(new ExportableEntry(path, 0, config, new SaveableCaption {bypassduration = true}));
+                current.AddRange(ExportableEntry.CreateFrameBucketedEntries(path, 0, config, new SaveableCaption() {bypassduration = true}).Item1);
             }
             else for (int i = 0; i < captions.Length; i++)
             {
                 var caption = captions[i];
-                current.Add(new ExportableEntry(path, i, config, caption));
+                var entries = ExportableEntry.CreateFrameBucketedEntries(path, counter, config, caption);
+                counter = entries.Item2;
+                current.AddRange(entries.Item1);
             }
         }
         

@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -35,13 +37,86 @@ public class StatusContainer // Status container with progress. For editing from
     public ExportableEntry entry;
 }
 
-public class ExportableEntry(string sourceFile, int index, Config config, SaveableCaption caption)
+public class ExportableEntry(string sourceFile, int index, Config config, SaveableCaption caption, (double, int) frameBucket)
 {
     public string sourceFile = sourceFile;
     public int index = index;
     public Config config = config;
     public SaveableCaption caption = caption;
-    
+    public (double, int) frameBucket = frameBucket;
+
+    public static (List<ExportableEntry>, int) CreateFrameBucketedEntries(string sourceFile, int startIndex, Config config, SaveableCaption caption)
+    {
+        // Available frames
+        int available = (int)((caption.end - caption.start) * config.fps);
+        int requestedLengthFrames = (int)(caption.end - caption.start) * config.fps;
+        if (config.bucketMode == FrameBucketMode.Disabled)
+        {
+            return (
+                new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, requestedLengthFrames))}
+                , startIndex + 1
+            );
+        }
+        
+        // 1. Find the largest bucket this caption can fit in
+        // 2. Apply the bucketing logic
+        var fitBuckets = config.buckets.Where(x => x <= available).ToList();
+
+        if (fitBuckets.Count == 0)
+        {
+            return (new List<ExportableEntry>(), startIndex);
+        }
+        
+        int largestFitBucket = fitBuckets.Max();
+
+        if (config.bucketMode == FrameBucketMode.MultipleOverlapping)
+        {
+            float fitCount = (float)requestedLengthFrames / largestFitBucket;
+            int fitCountInt = (int)Math.Floor(fitCount);
+            bool extraEnd = false;
+            if (fitCount % 1 != 0) extraEnd = true;
+
+            var buckets = new List<ExportableEntry>();
+            int counter = startIndex;
+            for (int i = 0; i < fitCountInt; i++)
+            {
+                double offset = caption.start + largestFitBucket * i;
+                buckets.Add(new (sourceFile, counter, config, caption, (offset/config.fps, largestFitBucket)));
+                counter++;
+            }
+
+            if (extraEnd)
+            {
+                buckets.Add(new (sourceFile, counter, config, caption, (caption.end - ((float)(largestFitBucket + 2) / config.fps), largestFitBucket)));
+                counter++;
+            }
+
+            return (buckets, counter);
+        }
+        else
+        {
+            switch (config.bucketMode)
+            {
+                case FrameBucketMode.Start:
+                    return (
+                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, largestFitBucket))},
+                        startIndex + 1
+                        );
+                case FrameBucketMode.Middle:
+                    return (
+                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, ((caption.start + caption.end) / 2 + (((float)largestFitBucket / config.fps) / 2), largestFitBucket))},
+                        startIndex + 1
+                    );
+                case FrameBucketMode.End:
+                    return (
+                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.end - ((float)(largestFitBucket+2) / config.fps), largestFitBucket))},
+                        startIndex + 1
+                    );
+            }
+        }
+        
+        return (new List<ExportableEntry>(), startIndex);
+    }
 
     public Task<int> Export(string destDir, string exportFlags, StatusContainer status)
     {
@@ -124,7 +199,12 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
         string command = "ffmpeg";
         string[] exportFlagsSplit = exportFlags == "" ? [] : exportFlags.Split(" "); // Empty list instead of list with 1 empty string.
         
-        string[] parameters = [..exportFlagsSplit, "-ss", caption.start.ToString(culture), "-to", caption.end.ToString(culture), "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];
+        if (frameBucket.Item2 == 1)
+        {
+            outFile = outFile.GetBaseName() + ".png";
+        }
+        
+        string[] parameters = [..exportFlagsSplit, "-ss", frameBucket.Item1.ToString(culture), "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", "-frames:v", frameBucket.Item2.ToString(culture), outFile];
         if (caption.bypassduration)
         {
             parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];

@@ -1,1 +1,1 @@
-{"fps":16,"inDir":"raw","outDir":"caption","procDir":"processing","saveTxt":true}
+{"fps":16,"saveTxt":1,"inDir":"raw","procDir":"processing","outDir":"caption","bucketMode":0,"buckets":[1]}

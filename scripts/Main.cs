@@ -186,7 +186,7 @@ public partial class Main : Node
 	{
 		string caption = captionBox.Text;
 		var (startSec, endSec, _) = GetRange();
-		var outVid = FfmpegUtil.CutVideoAndCreateCaption(activeVid, destDir, caption, startSec, endSec, config);
+		var outVid = FfmpegUtil.CutVideoAndCreateCaption(activeVid, destDir, caption, startSec, (int)(endSec * config.fps), config);
 		if (outVid != null)
 		{
 			RefreshPaths(true);

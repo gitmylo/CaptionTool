@@ -15,13 +15,13 @@ namespace CaptionTool.scripts.util;
 // Assums ffmpeg is installed system-wide
 public static class FfmpegUtil
 {
-    public static void CutVideo(string inFile, string outfile, double startSeconds, double endSeconds, Config config)
+    public static void CutVideo(string inFile, string outfile, double startSeconds, int frameCount, Config config)
     {
         var culture = CultureInfo.InvariantCulture;
         
         // ffmpeg -ss 60.0 -to 120.0 -i input.mp4 -c copy output.mp4
         string command = "ffmpeg";
-        string[] parameters = ["-ss", startSeconds.ToString(culture), "-to", endSeconds.ToString(culture), "-i", inFile, "-filter:v", $"fps={config.fps}", outfile];
+        string[] parameters = ["-ss", startSeconds.ToString(culture), "-i", inFile, "-filter:v", $"fps={config.fps}", "-frames:v", frameCount.ToString(culture), outfile];
 
         // Array output = new Array();
         
@@ -149,7 +149,7 @@ public static class FfmpegUtil
     public static string ConstructFileName(string dir, string filename, string extension) =>
         dir.PathJoin($"{filename}.{extension}");
 
-    public static string CutVideoAndCreateCaption(string inFile, string outDir, string caption, double startSeconds, double endSeconds, Config config)
+    public static string CutVideoAndCreateCaption(string inFile, string outDir, string caption, double startSeconds, int frameCount, Config config)
     {
         var (videoOut, captionOut) = GetOutPaths(inFile, outDir);
         if (caption.Length != 0 || (config.saveTxt == 1 || config.saveTxt == 3))
@@ -166,9 +166,10 @@ public static class FfmpegUtil
             }
         }
 
-        CutVideo(inFile, videoOut, startSeconds, endSeconds, config);
+        CutVideo(inFile, videoOut, startSeconds, frameCount, config);
         return videoOut;
     }
+
     
     // Frame extract, `ffmpeg -i troll.jpg -f image2pipe - > troll.png`
     public static string GetVideoFrame(string inFile, double position)
@@ -190,7 +191,6 @@ public static class FfmpegUtil
         while (true)
         {
             var length = (long)1024*8;
-            GD.Print("Reading");
             var buffer = io.GetBuffer(length);
             
             // if (buffer.All(x => x == 0)) break;

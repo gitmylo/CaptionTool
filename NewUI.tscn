@@ -157,9 +157,10 @@ item_2/id = 2
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 2
 
 [node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 split_offset = 400
@@ -496,16 +497,17 @@ position_offset = Vector2(600, 200)
 graph = NodePath("..")
 core = SubResource("Resource_wdqke")
 
-[node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "inPath", "procPath", "outPath")]
-visible = false
+[node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "bucketMode", "inPath", "procPath", "outPath", "buckets")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wmd31")
 script = ExtResource("2_d134i")
 fpsBox = NodePath("Holder/Workspace/GridContainer/Fps")
 saveTxtBox = NodePath("Holder/Workspace/GridContainer/Savetxt")
+bucketMode = NodePath("Holder/Workspace/GridContainer/OptionButton")
 inPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Input/Input")
 procPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Processing/Processing")
 outPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Output/Output")
+buckets = NodePath("Holder/Workspace/GridContainer/LineEdit")
 metadata/_tab_index = 2
 
 [node name="Holder" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings"]
@@ -617,6 +619,36 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "captioned"
 placeholder_text = "captioned"
+
+[node name="BucketMode" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+layout_mode = 2
+text = "Bucketing mode:"
+horizontal_alignment = 2
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+layout_mode = 2
+selected = 0
+item_count = 5
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "Start"
+popup/item_1/id = 1
+popup/item_2/text = "Middle"
+popup/item_2/id = 2
+popup/item_3/text = "End"
+popup/item_3/id = 3
+popup/item_4/text = "Multiple overlapping"
+popup/item_4/id = 4
+
+[node name="BucketsList" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+layout_mode = 2
+text = "Buckets:"
+horizontal_alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+layout_mode = 2
+text = "1, 81, 121"
+placeholder_text = "1, 81, 121, etc"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/Holder"]
 custom_minimum_size = Vector2(0, 13)

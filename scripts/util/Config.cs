@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Godot;
 using Newtonsoft.Json;
 
@@ -13,6 +14,17 @@ public class Config
     [JsonProperty] public string inDir = "raw";
     [JsonProperty] public string procDir = "processing";
     [JsonProperty] public string outDir = "captioned";
+    [JsonProperty] public FrameBucketMode bucketMode;
+    [JsonProperty] public List<int> buckets;
+}
+
+public enum FrameBucketMode
+{
+    Disabled = 0,
+    Start = 1,
+    Middle = 2,
+    End = 3,
+    MultipleOverlapping = 4
 }
 
 // A converter that allows loading old configs where saveTxt was a bool, and new configs where savetxt is an int
