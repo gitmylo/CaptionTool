@@ -14,8 +14,8 @@ public class Config
     [JsonProperty] public string inDir = "raw";
     [JsonProperty] public string procDir = "processing";
     [JsonProperty] public string outDir = "captioned";
-    [JsonProperty] public FrameBucketMode bucketMode;
-    [JsonProperty] public List<int> buckets;
+    [JsonProperty] public FrameBucketMode bucketMode = FrameBucketMode.Disabled;
+    [JsonProperty] public List<int> buckets = new ();
 }
 
 public enum FrameBucketMode
