@@ -37,23 +37,27 @@ public class StatusContainer // Status container with progress. For editing from
     public ExportableEntry entry;
 }
 
-public class ExportableEntry(string sourceFile, int index, Config config, SaveableCaption caption, (double, int) frameBucket)
+public class ExportableEntry(string sourceFile, int index, Config config, SaveableCaption caption, (double, int) frameBucket, int effectiveFps)
 {
     public string sourceFile = sourceFile;
     public int index = index;
     public Config config = config;
     public SaveableCaption caption = caption;
     public (double, int) frameBucket = frameBucket;
+    
+    public int effectiveFps = effectiveFps;
 
     public static (List<ExportableEntry>, int) CreateFrameBucketedEntries(string sourceFile, int startIndex, Config config, SaveableCaption caption)
     {
+        int effectiveFps = config.EffectiveFps((int)FfmpegUtil.GetVideoInfo(sourceFile).frameRate);
         // Available frames
-        int available = (int)(caption.end - caption.start) * config.fps;
+        // int available = (int)(caption.end - caption.start) * config.fps;
+        int available = (int)(caption.end - caption.start) * effectiveFps;
         // int requestedLengthFrames = (int)(caption.end - caption.start) * config.fps;
-        if (config.bucketMode == FrameBucketMode.Disabled || config.fps == 0)
+        if (config.bucketMode == FrameBucketMode.Disabled)
         {
             return (
-                new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, available))}
+                new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, available), effectiveFps)}
                 , startIndex + 1
             );
         }
@@ -81,13 +85,13 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
             for (int i = 0; i < fitCountInt; i++)
             {
                 double offset = caption.start + largestFitBucket * i;
-                buckets.Add(new (sourceFile, counter, config, caption, (offset/config.fps, largestFitBucket)));
+                buckets.Add(new (sourceFile, counter, config, caption, (offset/effectiveFps, largestFitBucket), effectiveFps));
                 counter++;
             }
 
             if (extraEnd)
             {
-                buckets.Add(new (sourceFile, counter, config, caption, (caption.end - ((float)(largestFitBucket + 2) / config.fps), largestFitBucket)));
+                buckets.Add(new (sourceFile, counter, config, caption, (caption.end - ((float)(largestFitBucket + 2) / effectiveFps), largestFitBucket), effectiveFps));
                 counter++;
             }
 
@@ -99,17 +103,17 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
             {
                 case FrameBucketMode.Start:
                     return (
-                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, largestFitBucket))},
+                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, largestFitBucket), effectiveFps)},
                         startIndex + 1
                         );
                 case FrameBucketMode.Middle:
                     return (
-                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, ((caption.start + caption.end) / 2 + (((float)largestFitBucket / config.fps) / 2), largestFitBucket))},
+                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, ((caption.start + caption.end) / 2 + (((float)largestFitBucket / effectiveFps) / 2), largestFitBucket), effectiveFps)},
                         startIndex + 1
                     );
                 case FrameBucketMode.End:
                     return (
-                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.end - ((float)(largestFitBucket+2) / config.fps), largestFitBucket))},
+                        new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.end - ((float)(largestFitBucket+2) / effectiveFps), largestFitBucket), effectiveFps)},
                         startIndex + 1
                     );
             }
@@ -204,21 +208,21 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
             outFile = outFile.GetBaseName() + ".png";
         }
 
-        string[] parameters = [..exportFlagsSplit, "-ss", frameBucket.Item1.ToString(culture), "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", "-frames:v", frameBucket.Item2.ToString(culture), outFile];
-        if (config.fps == 0)
-        {
-            parameters = [..exportFlagsSplit, "-ss", caption.start.ToString(culture), "-i", sourceFile, "-y", "-to", caption.end.ToString(culture), outFile];
-        }
+        string[] parameters = [..exportFlagsSplit, "-ss", frameBucket.Item1.ToString(culture), "-i", sourceFile, "-y", "-filter:v", $"fps={effectiveFps}", "-frames:v", frameBucket.Item2.ToString(culture), outFile];
+        // if (config.fps == 0)
+        // {
+        //     parameters = [..exportFlagsSplit, "-ss", caption.start.ToString(culture), "-i", sourceFile, "-y", "-to", caption.end.ToString(culture), outFile];
+        // }
         if (caption.bypassduration)
         {
-            if (config.fps == 0)
-            {
-                parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", outFile];
-            }
-            else
-            {
-                parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];
-            }
+            // if (config.fps == 0)
+            // {
+            //     parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", outFile];
+            // }
+            // else
+            // {
+                parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", "-filter:v", $"fps={effectiveFps}", outFile];
+            // }
         }
 
         // Array output = new Array();

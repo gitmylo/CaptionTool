@@ -497,13 +497,14 @@ position_offset = Vector2(600, 200)
 graph = NodePath("..")
 core = SubResource("Resource_wdqke")
 
-[node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "bucketMode", "inPath", "procPath", "outPath", "buckets")]
+[node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "bucketMode", "fpsMode", "inPath", "procPath", "outPath", "buckets")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wmd31")
 script = ExtResource("2_d134i")
-fpsBox = NodePath("Holder/Workspace/GridContainer/Fps")
+fpsBox = NodePath("Holder/Workspace/GridContainer/FpsBox/Fps")
 saveTxtBox = NodePath("Holder/Workspace/GridContainer/Savetxt")
 bucketMode = NodePath("Holder/Workspace/GridContainer/OptionButton")
+fpsMode = NodePath("Holder/Workspace/GridContainer/FpsBox/OptionButton")
 inPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Input/Input")
 procPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Processing/Processing")
 outPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Output/Output")
@@ -541,7 +542,10 @@ layout_mode = 2
 text = "Fps: "
 horizontal_alignment = 2
 
-[node name="Fps" type="SpinBox" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="FpsBox" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+layout_mode = 2
+
+[node name="Fps" type="SpinBox" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/FpsBox"]
 layout_mode = 2
 size_flags_horizontal = 0
 tooltip_text = "The framerate to convert the captioned videos to."
@@ -549,6 +553,15 @@ max_value = 99999.0
 value = 16.0
 alignment = 1
 suffix = "fps"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/FpsBox"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Exact"
+popup/item_0/id = 0
+popup/item_1/text = "Max"
+popup/item_1/id = 1
 
 [node name="SaveTxtLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
 layout_mode = 2

@@ -7,7 +7,7 @@ namespace CaptionTool.scripts.util;
 public partial class SettingsUI : Control
 {
     [Export] private SpinBox fpsBox;
-    [Export] public OptionButton saveTxtBox, bucketMode;
+    [Export] public OptionButton saveTxtBox, bucketMode, fpsMode;
     [Export] private LineEdit inPath, procPath, outPath, buckets;
 
     public event Action SettingChanged;
@@ -17,6 +17,7 @@ public partial class SettingsUI : Control
         fpsBox.ValueChanged += _ => InvokeUpdated();
         saveTxtBox.ItemSelected += _ => InvokeUpdated();
         bucketMode.ItemSelected += _ => InvokeUpdated();
+        fpsMode.ItemSelected += _ => InvokeUpdated();
 
         inPath.TextChanged += _ => InvokeUpdated();
         procPath.TextChanged += _ => InvokeUpdated();
@@ -40,6 +41,7 @@ public partial class SettingsUI : Control
         fpsBox.Value = c.fps;
         saveTxtBox.Selected = c.saveTxt;
         bucketMode.Selected = (int)c.bucketMode;
+        fpsMode.Selected = (int)c.fpsMode;
 
         inPath.Text = c.inDir;
         procPath.Text = c.procDir;
@@ -54,6 +56,7 @@ public partial class SettingsUI : Control
         c.fps = (int) fpsBox.Value;
         c.saveTxt = saveTxtBox.Selected;
         c.bucketMode = (FrameBucketMode) bucketMode.Selected;
+        c.fpsMode = (FpsMode) fpsMode.Selected;
 
         c.inDir = inPath.Text;
         c.procDir = procPath.Text;
@@ -61,10 +64,6 @@ public partial class SettingsUI : Control
         try
         {
             c.buckets = buckets.Text.Split(",").Select(x => x.Trim()).Select(int.Parse).ToList();
-        }
-        catch (Exception e)
-        {
-            // Console.WriteLine(e);
-        }
+        }catch (Exception e) {}
     }
 }

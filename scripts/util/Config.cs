@@ -15,7 +15,17 @@ public class Config
     [JsonProperty] public string procDir = "processing";
     [JsonProperty] public string outDir = "captioned";
     [JsonProperty] public FrameBucketMode bucketMode = FrameBucketMode.Disabled;
+    [JsonProperty] public FpsMode fpsMode = FpsMode.Exact;
     [JsonProperty] public List<int> buckets = new ();
+
+    public int EffectiveFps(int originalFps)
+    {
+        return fpsMode switch
+        {
+            FpsMode.Exact => (fps == 0) ? originalFps : fps,
+            FpsMode.Max => (originalFps > fps) ? fps : originalFps
+        };
+    }
 }
 
 public enum FrameBucketMode
@@ -25,6 +35,12 @@ public enum FrameBucketMode
     Middle = 2,
     End = 3,
     MultipleOverlapping = 4
+}
+
+public enum FpsMode
+{
+    Exact = 0,
+    Max = 1
 }
 
 // A converter that allows loading old configs where saveTxt was a bool, and new configs where savetxt is an int
