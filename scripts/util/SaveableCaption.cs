@@ -48,12 +48,12 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
     public static (List<ExportableEntry>, int) CreateFrameBucketedEntries(string sourceFile, int startIndex, Config config, SaveableCaption caption)
     {
         // Available frames
-        int available = (int)((caption.end - caption.start) * config.fps);
-        int requestedLengthFrames = (int)(caption.end - caption.start) * config.fps;
-        if (config.bucketMode == FrameBucketMode.Disabled)
+        int available = (int)(caption.end - caption.start) * config.fps;
+        // int requestedLengthFrames = (int)(caption.end - caption.start) * config.fps;
+        if (config.bucketMode == FrameBucketMode.Disabled || config.fps == 0)
         {
             return (
-                new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, requestedLengthFrames))}
+                new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, available))}
                 , startIndex + 1
             );
         }
@@ -71,7 +71,7 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
 
         if (config.bucketMode == FrameBucketMode.MultipleOverlapping)
         {
-            float fitCount = (float)requestedLengthFrames / largestFitBucket;
+            float fitCount = (float)available / largestFitBucket;
             int fitCountInt = (int)Math.Floor(fitCount);
             bool extraEnd = false;
             if (fitCount % 1 != 0) extraEnd = true;
@@ -203,16 +203,28 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
         {
             outFile = outFile.GetBaseName() + ".png";
         }
-        
+
         string[] parameters = [..exportFlagsSplit, "-ss", frameBucket.Item1.ToString(culture), "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", "-frames:v", frameBucket.Item2.ToString(culture), outFile];
+        if (config.fps == 0)
+        {
+            parameters = [..exportFlagsSplit, "-ss", caption.start.ToString(culture), "-i", sourceFile, "-y", "-to", caption.end.ToString(culture), outFile];
+        }
         if (caption.bypassduration)
         {
-            parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];
+            if (config.fps == 0)
+            {
+                parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", outFile];
+            }
+            else
+            {
+                parameters = [..exportFlagsSplit, "-i", sourceFile, "-y", "-filter:v", $"fps={config.fps}", outFile];
+            }
         }
 
         // Array output = new Array();
 
         Dictionary info = OS.ExecuteWithPipe("ffmpeg", parameters, false); // Not blocking
+        GD.Print("ffmpeg " + parameters.Join(" ") + "\n");
         status.pid = (int)info["pid"];
         var stdErr = (FileAccess)info["stderr"];
         string readErr = "";

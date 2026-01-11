@@ -545,7 +545,6 @@ horizontal_alignment = 2
 layout_mode = 2
 size_flags_horizontal = 0
 tooltip_text = "The framerate to convert the captioned videos to."
-min_value = 1.0
 max_value = 99999.0
 value = 16.0
 alignment = 1
