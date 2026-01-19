@@ -367,7 +367,7 @@ public partial class NewUI : Node
         }
     }
 
-    private string[] blacklist = ["txt"];
+    private string[] blacklist = ["txt", "json", "jsonl", "xml", "csv"];
     public List<string> GetAllFilePathsRecursive(string basePath, List<string> addTo = null)
     {
         if (addTo == null) addTo = new List<string>();
