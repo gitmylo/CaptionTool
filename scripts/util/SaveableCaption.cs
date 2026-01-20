@@ -49,6 +49,13 @@ public class ExportableEntry(string sourceFile, int index, Config config, Saveab
 
     public static (List<ExportableEntry>, int) CreateFrameBucketedEntries(string sourceFile, int startIndex, Config config, SaveableCaption caption)
     {
+        if (NewUI.ImageExtensions.Contains(sourceFile.GetExtension().ToLower())) // Image file
+        {
+            return (
+                new List<ExportableEntry> {new (sourceFile, startIndex, config, caption, (caption.start, 1), 0)}
+                , startIndex + 1
+            );
+        }
         int effectiveFps = config.EffectiveFps((int)FfmpegUtil.GetVideoInfo(sourceFile).frameRate);
         // Available frames
         // int available = (int)(caption.end - caption.start) * config.fps;
