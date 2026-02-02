@@ -169,7 +169,6 @@ public static class FfmpegUtil
         CutVideo(inFile, videoOut, startSeconds, frameCount, config);
         return videoOut;
     }
-
     
     // Frame extract, `ffmpeg -i troll.jpg -f image2pipe - > troll.png`
     public static string GetVideoFrame(string inFile, double position)
@@ -180,7 +179,7 @@ public static class FfmpegUtil
         var culture = CultureInfo.InvariantCulture;
         
         string command = "ffmpeg";
-        string[] parameters = ["-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "png", "-f", "image2pipe", "-"];
+        string[] parameters = ["-loglevel", "quiet", "-ss", position.ToString(culture), "-i", inFile, "-frames:v", "1", "-c:v", "png", "-f", "image2pipe", "-"];
         
         var process = OS.ExecuteWithPipe(command, parameters, true);
         var io = process["stdio"].As<FileAccess>();
