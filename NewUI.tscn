@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cot6blxye5n0r"]
+[gd_scene format=3 uid="uid://cot6blxye5n0r"]
 
 [ext_resource type="Script" uid="uid://ktq1ukfbueuc" path="res://scripts/NewUI.cs" id="1_wmd31"]
 [ext_resource type="Script" uid="uid://bfs3hnhkf54ey" path="res://scripts/util/SettingsUI.cs" id="2_d134i"]
@@ -83,7 +83,7 @@ content_margin_top = 20.0
 content_margin_right = 20.0
 content_margin_bottom = 20.0
 
-[node name="NewUi" type="Control" node_paths=PackedStringArray("MainTabs", "SettingsTab", "WorkspaceDialog", "inFiles", "player", "playPause", "saveButton", "newButton", "deleteButton", "progressBar", "rangeSlider", "captionBox", "aspectBox", "imageBox", "EntryList", "activeVidLabel", "indicator", "rangeIndicatorText", "threadCount", "exportButton", "mainProgressBar", "progressBarParent", "exportFlags")]
+[node name="NewUi" type="Control" unique_id=467153729 node_paths=PackedStringArray("MainTabs", "SettingsTab", "WorkspaceDialog", "inFiles", "player", "playPause", "saveButton", "newButton", "deleteButton", "progressBar", "rangeSlider", "captionBox", "aspectBox", "imageBox", "EntryList", "activeVidLabel", "indicator", "rangeIndicatorText", "threadCount", "exportButton", "mainProgressBar", "progressBarParent", "exportFlags")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -116,7 +116,7 @@ progressBarParent = NodePath("VBoxContainer/TabContainer/Export/Export/ScrollCon
 progressBarScene = ExtResource("4_d3anu")
 exportFlags = NodePath("VBoxContainer/TabContainer/Export/Export/HBoxContainer/FfmpegFlags")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=959530683]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -124,9 +124,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HidePlace" type="Node" parent="VBoxContainer"]
+[node name="HidePlace" type="Node" parent="VBoxContainer" unique_id=1939551576]
 
-[node name="Workflow" type="PopupMenu" parent="VBoxContainer/HidePlace" node_paths=PackedStringArray("showPlace", "hidePlace", "tabs")]
+[node name="Workflow" type="PopupMenu" parent="VBoxContainer/HidePlace" unique_id=1571420917 node_paths=PackedStringArray("showPlace", "hidePlace", "tabs")]
 size = Vector2i(129, 100)
 item_count = 3
 item_0/text = "Save"
@@ -141,10 +141,10 @@ hidePlace = NodePath("..")
 tabs = NodePath("../../TabContainer")
 validTab = 1
 
-[node name="MenuBar" type="MenuBar" parent="VBoxContainer"]
+[node name="MenuBar" type="MenuBar" parent="VBoxContainer" unique_id=1861446768]
 layout_mode = 2
 
-[node name="Workspace" type="PopupMenu" parent="VBoxContainer/MenuBar"]
+[node name="Workspace" type="PopupMenu" parent="VBoxContainer/MenuBar" unique_id=1976317278]
 size = Vector2i(116, 100)
 item_count = 3
 item_0/text = "Open"
@@ -154,53 +154,54 @@ item_1/id = 1
 item_2/text = "Exit"
 item_2/id = 2
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1241170079]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 2
+current_tab = 1
 
-[node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
+[node name="Files" type="HSplitContainer" parent="VBoxContainer/TabContainer" unique_id=947417271]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
+split_offsets = PackedInt32Array(400)
 split_offset = 400
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files" unique_id=1191430436]
 layout_mode = 2
 
-[node name="ActiveVid" type="Label" parent="VBoxContainer/TabContainer/Files/VBoxContainer"]
+[node name="ActiveVid" type="Label" parent="VBoxContainer/TabContainer/Files/VBoxContainer" unique_id=855402959]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "No video selected"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Files/VBoxContainer"]
+[node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Files/VBoxContainer" unique_id=1689270065]
 layout_mode = 2
 size_flags_vertical = 3
 columns = 2
 allow_reselect = true
 hide_root = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files" unique_id=146232313]
 layout_mode = 2
 
-[node name="VideoAndCaption" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer"]
+[node name="VideoAndCaption" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer" unique_id=887676730]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ImageBox" type="TextureRect" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption"]
+[node name="ImageBox" type="TextureRect" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption" unique_id=321899231]
 layout_mode = 2
 size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption"]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption" unique_id=1880441635]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/AspectRatioContainer"]
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/AspectRatioContainer" unique_id=227309656]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -208,65 +209,65 @@ stream = SubResource("VideoStreamFFmpeg_d134i")
 expand = true
 loop = true
 
-[node name="VideoControls" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption"]
+[node name="VideoControls" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption" unique_id=667351762]
 layout_mode = 2
 
-[node name="Controls" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls"]
+[node name="Controls" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls" unique_id=1489346458]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="PlayPause" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls"]
+[node name="PlayPause" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls" unique_id=862175857]
 layout_mode = 2
 shortcut = SubResource("Shortcut_4mqxk")
 text = "Play/Pause"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls" unique_id=264514638]
 layout_mode = 2
 
-[node name="Save" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls/HBoxContainer"]
+[node name="Save" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls/HBoxContainer" unique_id=465814365]
 layout_mode = 2
 size_flags_horizontal = 3
 shortcut = SubResource("Shortcut_d3anu")
 text = "Save
 "
 
-[node name="New" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls/HBoxContainer"]
+[node name="New" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls/HBoxContainer" unique_id=1606103660]
 layout_mode = 2
 size_flags_horizontal = 3
 shortcut = SubResource("Shortcut_xq6f8")
 text = "New"
 
-[node name="Delete" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls"]
+[node name="Delete" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Controls" unique_id=412734628]
 layout_mode = 2
 shortcut = SubResource("Shortcut_56ssd")
 text = "Delete caption"
 
-[node name="Sliders" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls"]
+[node name="Sliders" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls" unique_id=895499639]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Progress" type="HSlider" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders"]
+[node name="Progress" type="HSlider" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders" unique_id=1748638789]
 layout_mode = 2
 max_value = 1.0
 step = 0.0
 
-[node name="Range" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders"]
+[node name="Range" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders" unique_id=1168231629]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range" unique_id=285830949]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range/HBoxContainer" unique_id=302920946]
 layout_mode = 2
 text = "Range:"
 
-[node name="RangeIndicator" type="Label" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range/HBoxContainer"]
+[node name="RangeIndicator" type="Label" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range/HBoxContainer" unique_id=1569280101]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "[0.00s -> 0.00s] (0.00s)"
 horizontal_alignment = 2
 
-[node name="MinMaxSlider" type="Control" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range"]
+[node name="MinMaxSlider" type="Control" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Range" unique_id=1773492882]
 layout_mode = 2
 script = ExtResource("3_xq6f8")
 background = Color(0.133333, 0.133333, 0.133333, 1)
@@ -275,10 +276,10 @@ notches = Color(0.866667, 0.866667, 0.866667, 1)
 inset = 5.0
 metadata/_custom_type_script = "uid://oi0je2ifv8t0"
 
-[node name="Extras" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders"]
+[node name="Extras" type="HBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders" unique_id=1822993370]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Extras" node_paths=PackedStringArray("Player", "CaptionBox", "Indicator")]
+[node name="Button" type="Button" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption/VideoControls/Sliders/Extras" unique_id=60032243 node_paths=PackedStringArray("Player", "CaptionBox", "Indicator")]
 layout_mode = 2
 text = "LLM caption"
 script = ExtResource("4_x3v8y")
@@ -286,28 +287,28 @@ Player = NodePath("../../../../AspectRatioContainer/VideoStreamPlayer")
 CaptionBox = NodePath("../../../../CaptionBox")
 Indicator = NodePath("../../../../../VBoxContainer/ColorIndicator")
 
-[node name="CaptionBox" type="TextEdit" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption"]
+[node name="CaptionBox" type="TextEdit" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VideoAndCaption" unique_id=61101394]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 placeholder_text = "Caption here"
 wrap_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer" unique_id=479576146]
 layout_mode = 2
 
-[node name="CaptionList" type="ScrollContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer"]
+[node name="CaptionList" type="ScrollContainer" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer" unique_id=564400824]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="EntryList" type="ItemList" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer/CaptionList"]
+[node name="EntryList" type="ItemList" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer/CaptionList" unique_id=335032871]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 auto_width = true
 
-[node name="ColorIndicator" type="ColorRect" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer"]
+[node name="ColorIndicator" type="ColorRect" parent="VBoxContainer/TabContainer/Files/HBoxContainer/VBoxContainer" unique_id=952512271]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -315,109 +316,109 @@ size_flags_vertical = 8
 color = Color(1, 0, 0, 1)
 script = ExtResource("2_n2i5l")
 
-[node name="Workflow" type="HSplitContainer" parent="VBoxContainer/TabContainer"]
-visible = false
+[node name="Workflow" type="HSplitContainer" parent="VBoxContainer/TabContainer" unique_id=1710179936]
 layout_mode = 2
+split_offsets = PackedInt32Array(400)
 split_offset = 400
 metadata/_tab_index = 1
 
-[node name="SaveWorkflowPopup" parent="VBoxContainer/TabContainer/Workflow" instance=ExtResource("7_kqcfq")]
+[node name="SaveWorkflowPopup" parent="VBoxContainer/TabContainer/Workflow" unique_id=586073541 instance=ExtResource("7_kqcfq")]
 visible = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow" unique_id=1138122428]
 layout_mode = 2
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer" unique_id=1490579125]
 layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
 
-[node name="Saved" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer"]
+[node name="Saved" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer" unique_id=538779616]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved" unique_id=1503777251]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/HBoxContainer" unique_id=479970115]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "No workflow selected"
 horizontal_alignment = 1
 
-[node name="RefreshButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/HBoxContainer"]
+[node name="RefreshButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/HBoxContainer" unique_id=218730913]
 layout_mode = 2
 text = "Refresh"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved" unique_id=1223474650]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Saved/ScrollContainer" unique_id=1713107335]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Running" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer"]
+[node name="Running" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer" unique_id=1989115186]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running" unique_id=1316424846]
 layout_mode = 2
 
-[node name="TestButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer3"]
+[node name="TestButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer3" unique_id=701769191]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Run with selected file"
 
-[node name="ProcessAllButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer3"]
+[node name="ProcessAllButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer3" unique_id=320208185]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Process all"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running" unique_id=1998326508]
 layout_mode = 2
 
-[node name="ClearCompletedButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer"]
+[node name="ClearCompletedButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer" unique_id=95448757]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear completed"
 
-[node name="CancelRunningButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer"]
+[node name="CancelRunningButton" type="Button" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer" unique_id=343649022]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Cancel all running"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running" unique_id=928107482]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer2" unique_id=224127443]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Max threads"
 horizontal_alignment = 2
 
-[node name="MaxThreadsBox" type="SpinBox" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer2"]
+[node name="MaxThreadsBox" type="SpinBox" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/HBoxContainer2" unique_id=1718604634]
 layout_mode = 2
 min_value = 1.0
 value = 1.0
 rounded = true
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running" unique_id=1773866354]
 layout_mode = 2
 max_value = 1.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running" unique_id=19229961]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GraphProgressBox" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/ScrollContainer"]
+[node name="GraphProgressBox" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/VBoxContainer/TabContainer/Running/ScrollContainer" unique_id=1977068312]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" node_paths=PackedStringArray("InputNode", "OutputNode", "ui", "popup", "popupSearchBox", "availableNodes", "errorDialog", "saveDialog", "testFileButton", "processAllButton", "scroll", "popupMenu", "currentWorkflowLabel", "refreshButton", "savedGraphList", "globalProgressBar", "progressItemsList", "clearCompletedButton", "cancelRunningButton", "maxThreadsBox")]
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/TabContainer/Workflow" unique_id=2582932 node_paths=PackedStringArray("InputNode", "OutputNode", "ui", "popup", "popupSearchBox", "availableNodes", "errorDialog", "saveDialog", "testFileButton", "processAllButton", "scroll", "popupMenu", "currentWorkflowLabel", "refreshButton", "savedGraphList", "globalProgressBar", "progressItemsList", "clearCompletedButton", "cancelRunningButton", "maxThreadsBox")]
 layout_mode = 2
 size_flags_vertical = 3
 right_disconnects = true
@@ -447,37 +448,37 @@ cancelRunningButton = NodePath("../VBoxContainer/TabContainer/Running/HBoxContai
 maxThreadsBox = NodePath("../VBoxContainer/TabContainer/Running/HBoxContainer2/MaxThreadsBox")
 progressItemScene = ExtResource("8_wdqke")
 
-[node name="PopupPanel" type="PopupPanel" parent="VBoxContainer/TabContainer/Workflow/GraphEdit"]
+[node name="PopupPanel" type="PopupPanel" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" unique_id=274311199]
 size = Vector2i(303, 300)
 theme_override_styles/panel = SubResource("StyleBoxFlat_oq113")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel" unique_id=1386499005]
 offset_right = 303.0
 offset_bottom = 300.0
 size_flags_horizontal = 3
 
-[node name="SearchBox" type="LineEdit" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer"]
+[node name="SearchBox" type="LineEdit" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer" unique_id=719428218]
 layout_mode = 2
 placeholder_text = "Search"
 alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer" unique_id=1286152790]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemsList" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer/ScrollContainer"]
+[node name="ItemsList" type="VBoxContainer" parent="VBoxContainer/TabContainer/Workflow/GraphEdit/PopupPanel/VBoxContainer/ScrollContainer" unique_id=1124986103]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ErrorDialog" type="AcceptDialog" parent="VBoxContainer/TabContainer/Workflow/GraphEdit"]
+[node name="ErrorDialog" type="AcceptDialog" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" unique_id=89779803]
 title = "Error!"
 initial_position = 2
 size = Vector2i(423, 100)
 dialog_text = "A node is missing an input, please connect this node."
 
-[node name="InputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" node_paths=PackedStringArray("graph") instance=ExtResource("8_wesyw")]
+[node name="InputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" unique_id=376503091 node_paths=PackedStringArray("graph") instance=ExtResource("8_wesyw")]
 layout_mode = 0
 offset_left = 200.0
 offset_top = 200.0
@@ -487,7 +488,7 @@ position_offset = Vector2(200, 200)
 graph = NodePath("..")
 core = SubResource("Resource_wh2er")
 
-[node name="OutputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" node_paths=PackedStringArray("graph") instance=ExtResource("9_6xpl8")]
+[node name="OutputNode" parent="VBoxContainer/TabContainer/Workflow/GraphEdit" unique_id=1192397087 node_paths=PackedStringArray("graph") instance=ExtResource("9_6xpl8")]
 layout_mode = 0
 offset_left = 600.0
 offset_top = 200.0
@@ -497,7 +498,8 @@ position_offset = Vector2(600, 200)
 graph = NodePath("..")
 core = SubResource("Resource_wdqke")
 
-[node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" node_paths=PackedStringArray("fpsBox", "saveTxtBox", "bucketMode", "fpsMode", "inPath", "procPath", "outPath", "buckets")]
+[node name="Settings" type="PanelContainer" parent="VBoxContainer/TabContainer" unique_id=1610139165 node_paths=PackedStringArray("fpsBox", "saveTxtBox", "bucketMode", "fpsMode", "inPath", "procPath", "outPath", "buckets")]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wmd31")
 script = ExtResource("2_d134i")
@@ -511,41 +513,41 @@ outPath = NodePath("Holder/Workspace/GridContainer/HBoxContainer/Output/Output")
 buckets = NodePath("Holder/Workspace/GridContainer/LineEdit")
 metadata/_tab_index = 2
 
-[node name="Holder" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings"]
+[node name="Holder" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings" unique_id=1427431556]
 layout_mode = 2
 
-[node name="SettingsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder"]
+[node name="SettingsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder" unique_id=172384920]
 layout_mode = 2
 text = "Settings"
 label_settings = SubResource("LabelSettings_wmd31")
 horizontal_alignment = 1
 
-[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/Holder"]
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/Holder" unique_id=1760842946]
 layout_mode = 2
 theme_override_constants/separation = 9
 
-[node name="Workspace" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder"]
+[node name="Workspace" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder" unique_id=1164833478]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace" unique_id=1504876813]
 layout_mode = 2
 text = "Workspace settings"
 label_settings = SubResource("LabelSettings_xq6f8")
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace" unique_id=1878911870]
 layout_mode = 2
 size_flags_vertical = 3
 columns = 2
 
-[node name="FpsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="FpsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=428529352]
 layout_mode = 2
 text = "Fps: "
 horizontal_alignment = 2
 
-[node name="FpsBox" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="FpsBox" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=1157178234]
 layout_mode = 2
 
-[node name="Fps" type="SpinBox" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/FpsBox"]
+[node name="Fps" type="SpinBox" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/FpsBox" unique_id=1382048117]
 layout_mode = 2
 size_flags_horizontal = 0
 tooltip_text = "The framerate to convert the captioned videos to."
@@ -554,7 +556,7 @@ value = 16.0
 alignment = 1
 suffix = "fps"
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/FpsBox"]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/FpsBox" unique_id=225032266]
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -563,12 +565,12 @@ popup/item_0/id = 0
 popup/item_1/text = "Max"
 popup/item_1/id = 1
 
-[node name="SaveTxtLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="SaveTxtLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=1083804220]
 layout_mode = 2
 text = "Save without caption:"
 horizontal_alignment = 2
 
-[node name="Savetxt" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="Savetxt" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=603086784]
 layout_mode = 2
 selected = 0
 item_count = 4
@@ -581,63 +583,63 @@ popup/item_2/id = 2
 popup/item_3/text = "Save only captioned videos, skip .txt files for empty captions"
 popup/item_3/id = 3
 
-[node name="FilePathsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="FilePathsLabel" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=816016044]
 layout_mode = 2
 text = "File paths:"
 horizontal_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=1214208766]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Input" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer"]
+[node name="Input" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer" unique_id=389389114]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Input"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Input" unique_id=1924236602]
 layout_mode = 2
 text = "  Input:"
 
-[node name="Input" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Input"]
+[node name="Input" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Input" unique_id=293737763]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "raw"
 placeholder_text = "raw"
 
-[node name="Processing" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer"]
+[node name="Processing" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer" unique_id=6478490]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Processing"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Processing" unique_id=728700994]
 layout_mode = 2
 text = "  Processing:"
 
-[node name="Processing" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Processing"]
+[node name="Processing" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Processing" unique_id=223218252]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "processing"
 placeholder_text = "processing"
 
-[node name="Output" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer"]
+[node name="Output" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer" unique_id=213270224]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Output"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Output" unique_id=1557080572]
 layout_mode = 2
 text = "  Output:"
 
-[node name="Output" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Output"]
+[node name="Output" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer/HBoxContainer/Output" unique_id=357284632]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "captioned"
 placeholder_text = "captioned"
 
-[node name="BucketMode" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="BucketMode" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=118596181]
 layout_mode = 2
 text = "Bucketing mode:"
 horizontal_alignment = 2
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=2069542631]
 layout_mode = 2
 selected = 0
 item_count = 5
@@ -652,84 +654,84 @@ popup/item_3/id = 3
 popup/item_4/text = "Multiple overlapping"
 popup/item_4/id = 4
 
-[node name="BucketsList" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="BucketsList" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=1151633459]
 layout_mode = 2
 text = "Buckets:"
 horizontal_alignment = 2
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Workspace/GridContainer" unique_id=55065469]
 layout_mode = 2
 text = "1, 81, 121"
 placeholder_text = "1, 81, 121, etc"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/Holder"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/Holder" unique_id=1194197231]
 custom_minimum_size = Vector2(0, 13)
 layout_mode = 2
 
-[node name="Global" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder"]
+[node name="Global" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/Holder" unique_id=1998178546]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global" unique_id=916276093]
 layout_mode = 2
 text = "Global settings"
 label_settings = SubResource("LabelSettings_xq6f8")
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Global"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Settings/Holder/Global" unique_id=177977989]
 layout_mode = 2
 columns = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=1972844254]
 layout_mode = 2
 text = "Api endpoint"
 horizontal_alignment = 2
 
-[node name="Endpoint" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="Endpoint" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=616783830]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "https://api.openai.com/v1/"
 placeholder_text = "https://api.openai.com/v1/"
 
-[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Endpoint" node_paths=PackedStringArray("valueSource")]
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Endpoint" unique_id=297823684 node_paths=PackedStringArray("valueSource")]
 script = ExtResource("6_4mqxk")
 Name = "api_endpoint"
 valueSource = NodePath("..")
 
-[node name="Label2" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=903232466]
 layout_mode = 2
 text = "Api key"
 horizontal_alignment = 2
 
-[node name="Key" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="Key" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=2064309898]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 secret = true
 
-[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Key" node_paths=PackedStringArray("valueSource")]
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Key" unique_id=24326583 node_paths=PackedStringArray("valueSource")]
 script = ExtResource("6_4mqxk")
 Name = "api_key"
 valueSource = NodePath("..")
 
-[node name="Label4" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="Label4" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=1481246307]
 layout_mode = 2
 text = "Api model"
 horizontal_alignment = 2
 
-[node name="Model" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="Model" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=770245984]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "model"
 
-[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Model" node_paths=PackedStringArray("valueSource")]
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/Model" unique_id=474962704 node_paths=PackedStringArray("valueSource")]
 script = ExtResource("6_4mqxk")
 Name = "api_model"
 valueSource = NodePath("..")
 
-[node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=1625614576]
 layout_mode = 2
 text = "System prompt"
 
-[node name="SystemPrompt" type="TextEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer"]
+[node name="SystemPrompt" type="TextEdit" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer" unique_id=2031856621]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 text = "You are a helpful captioning assistant, you are provided with a frame from a video, and you should tag everything you see, the characters, the actions, other objects in the scene, perspectives, etc. The more the better.
@@ -748,28 +750,28 @@ Captions are written as concepts and short phrases, with commas separating them.
 When responding to the user message, only respond with the tags, with no prefixes or suffixes. Just the tags and nothing more."
 wrap_mode = 1
 
-[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/SystemPrompt" node_paths=PackedStringArray("valueSource")]
+[node name="Node" type="Node" parent="VBoxContainer/TabContainer/Settings/Holder/Global/GridContainer/SystemPrompt" unique_id=1015121775 node_paths=PackedStringArray("valueSource")]
 script = ExtResource("6_4mqxk")
 Name = "system_prompt"
 valueSource = NodePath("..")
 
-[node name="Export" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+[node name="Export" type="PanelContainer" parent="VBoxContainer/TabContainer" unique_id=392216754]
 visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_n2i5l")
 metadata/_tab_index = 3
 
-[node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer/Export"]
+[node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer/Export" unique_id=419068935]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Export/Export"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Export/Export" unique_id=569242744]
 layout_mode = 2
 
-[node name="ExportButton" type="Button" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer"]
+[node name="ExportButton" type="Button" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer" unique_id=670867559]
 layout_mode = 2
 text = "Export all"
 
-[node name="ThreadCount" type="SpinBox" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer"]
+[node name="ThreadCount" type="SpinBox" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer" unique_id=1763808308]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 min_value = 1.0
@@ -778,30 +780,30 @@ rounded = true
 allow_greater = true
 suffix = "Threads"
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer" unique_id=701973487]
 layout_mode = 2
 text = "Ffmpeg flags: "
 
-[node name="FfmpegFlags" type="LineEdit" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer"]
+[node name="FfmpegFlags" type="LineEdit" parent="VBoxContainer/TabContainer/Export/Export/HBoxContainer" unique_id=1884050533]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "-hwaccel cuda"
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/TabContainer/Export/Export"]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/TabContainer/Export/Export" unique_id=258012376]
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Export/Export"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Export/Export" unique_id=328755119]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ProgressBarParent" type="VBoxContainer" parent="VBoxContainer/TabContainer/Export/Export/ScrollContainer"]
+[node name="ProgressBarParent" type="VBoxContainer" parent="VBoxContainer/TabContainer/Export/Export/ScrollContainer" unique_id=2092124920]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="OpenDialog" type="FileDialog" parent="."]
+[node name="OpenDialog" type="FileDialog" parent="." unique_id=1854251409]
 title = "Open a Directory"
 initial_position = 2
 size = Vector2i(1200, 700)

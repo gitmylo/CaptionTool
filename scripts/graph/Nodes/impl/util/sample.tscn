@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvk5tsuotw767"]
+[gd_scene format=3 uid="uid://bvk5tsuotw767"]
 
 [ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_nphhx"]
 [ext_resource type="Script" uid="uid://1xoep4o0r4sv" path="res://scripts/graph/Nodes/impl/scripts/util/SamplePoints.cs" id="2_i0gbi"]

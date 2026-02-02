@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://ryx4orvde64g"]
+
+[ext_resource type="Script" uid="uid://bmtrx0kqjd4dm" path="res://scripts/graph/Nodes/CustomNode.cs" id="1_xtxhk"]
+[ext_resource type="Script" uid="uid://cd2l8iey7pofy" path="res://scripts/graph/Nodes/impl/scripts/util/ResizeImage.cs" id="2_xtxhk"]
+
+[sub_resource type="Resource" id="Resource_te0uf"]
+script = ExtResource("2_xtxhk")
+metadata/_custom_type_script = "uid://cd2l8iey7pofy"
+
+[node name="Sample" type="GraphNode" unique_id=1491050482]
+custom_minimum_size = Vector2(0, 90)
+offset_right = 222.0
+offset_bottom = 90.0
+mouse_filter = 1
+resizable = true
+title = "Resize image"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 2
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+script = ExtResource("1_xtxhk")
+core = SubResource("Resource_te0uf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1009677407]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=135271582]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Image"
+
+[node name="Label2" type="Label" parent="HBoxContainer" unique_id=1068265504]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Resized"
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="." unique_id=851013684]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Max side length"

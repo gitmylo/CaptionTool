@@ -55,7 +55,7 @@ public partial class LlmSendRequest : ExecutionCore
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Failed to parse llm response, api doesn't follow output format or failed to parse for anothe reason.");
+                    throw new Exception("Failed to parse llm response, api doesn't follow output format or failed to parse for another reason.");
                 }
             }
         }
