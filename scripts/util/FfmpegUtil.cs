@@ -226,34 +226,41 @@ public static class FfmpegUtil
 
     public class VideoInfo
     {
-        public int width, height, frameCount, fileSize;
+        public int width, height, frameCount;//, fileSize;
         public double duration, frameRate;
-        public string filename;
+        // public string filename;
 
-        public VideoInfo(int width, int height, double duration, double frameRate, int frameCount, string filename,
-            int fileSize)
+        public VideoInfo(int width, int height, double duration, double frameRate, int frameCount//, string filename,
+            //int fileSize)
+            )
         {
             this.width = width;
             this.height = height;
             this.duration = duration;
             this.frameRate = frameRate;
             this.frameCount = frameCount;
-            this.filename = filename;
-            this.fileSize = fileSize;
+            // this.filename = filename;
+            // this.fileSize = fileSize;
         }
         
         public static VideoInfo FromOutput(string output)
         {
-            var dict = Json.ParseString(output).AsGodotDictionary<string, Variant>();
-            var firstStream = dict["streams"].AsGodotArray<Dictionary<String, Variant>>()[0];
-            var format = dict["format"].AsGodotDictionary<string, string>();
+            try
+            {
+                var dict = Json.ParseString(output).AsGodotDictionary<string, Variant>();
+                var firstStream = dict["streams"].AsGodotArray<Dictionary<String, Variant>>()[0];
+                var format = dict["format"].AsGodotDictionary<string, string>();
 
-            var frameRateStrings = firstStream["r_frame_rate"].AsString().Split("/");
-            var frameRate = (double)int.Parse(frameRateStrings[0]) / int.Parse(frameRateStrings[1]);
-            var duration = double.Parse(format["duration"], CultureInfo.InvariantCulture);
-            var size = int.Parse(format["size"]);
+                var frameRateStrings = firstStream["r_frame_rate"].AsString().Split("/");
+                var frameRate = (double)int.Parse(frameRateStrings[0]) / int.Parse(frameRateStrings[1]);
+                var duration = double.Parse(format["duration"], CultureInfo.InvariantCulture);
+                // var size = int.Parse(format["size"]);
 
-            return new VideoInfo(firstStream["width"].AsInt32(), firstStream["height"].AsInt32(), duration, frameRate, (int)(duration * frameRate), format["filename"], size);
+                return new VideoInfo(firstStream["width"].AsInt32(), firstStream["height"].AsInt32(), duration, frameRate, (int)(duration * frameRate));
+            }
+            catch (Exception e) {}
+
+            return new VideoInfo(0, 0, 0, 1, 1);
         }
     }
 
